@@ -4,12 +4,11 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+		<title>Clean Code - Prato NV</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
 
-		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 
 		<!-- Printing and PDF exports -->
@@ -24,8 +23,199 @@
 	<body>
 		<div class="reveal">
 			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
+				<section>
+					<h1>Clean code</h1>
+					<h3></h3>
+					<p>
+						<small>Prato NV</small>
+					</p>
+				</section>
+				<section>intro: gsm uit, braaf zijn, blabla, insert gif here</section>
+
+				<section>Inhoudsopgave: waar we het over gaan hebben</section>
+
+				<section>Clean code deel 1: definitie</section>
+				<section>
+				Wat is clean code?
+					<blockquote>
+					Clean code is code that is easy to understand and easy to change.
+					</blockquote>
+				</section>
+				<section>
+					Wat is <b>niet</b> clean code?
+					<pre><code>
+		function process($obj, $continue = FALSE) {
+			// echo "starting the process";
+			if($obj->generate() == NULL) {
+				return -1;
+			}
+			$result = $obj->generate();
+			if($continue) {
+				return $result->generate();
+			}
+			return $result;
+		}
+					</code></pre>
+				</section>
+				<section>
+					Wat is <b>wel</b> clean code?
+					<pre><code>
+function getBookByISBN($isbn) {
+	$book = array_search($isbn, $this->books);
+	if($book == FALSE) {
+		throw new BookNotFoundException("book was not found!");
+	}
+	return $book;
+}
+					</code></pre>
+
+				</section>
+				<section>
+					<h3>Leesbaarheid!</h3>
+
+					<blockquote>
+Code gets read a lot (at least whenever
+someone is writing more code), so any school
+of clean code should emphasize readability.
+Cleaning up a little wherever you go is
+required to keep code clean.
+					</blockquote>
+				</section>
+
+				<section>Clean code deel 2: principes</section>
+				<section>
+					<h4>1. Naamgeving: wat is de ideale naamgeving?</h4>
+					<ul>
+						<li>Het moet correct weerspiegelen waar het voor dient</li>
+						<li>Het leunt aan bij de taal die gesproken wordt in het domein</li>
+					</ul>
+				</section>
+				<section>
+					<h4>1. Naamgeving: methods/variabelen</h4>
+					<pre><code>
+$result = $processor->process();
+					</code></pre>
+					<pre><code>
+$order = $library->checkOut();
+					</code></pre>
+				</section>
+				<section>
+					<h4>1. Naamgeving: comments</h4>
+					<pre><code>
+/**
+ *
+ * Prolong the book
+ *
+ * @param    Book  		$i The book to prolong
+ * @param    DateTime  		$j The date to prolong to
+ * @param    Person		$k The person to prolong the book to
+ * @return   nothing if OK
+ *
+ */
+function prolong($i, $j, $k) {
+	//Check if this book has been checked out by the same person
+	if($i->person != $k)
+		//BUSTED!
+		return "This is not a book you checked out."
+	else
+		//Everything OK, prolong the book
+		$book->checkOutDate = $date;
+}
+					</code></pre>
+				</section>
+				<section>
+					<h4>1. Naamgeving: comments</h4>
+					<pre><code>
+function prolong($book, $date, $person) {
+	if(!$book->isCheckedOutBy($person))
+		return "This is not a book you checked out."
+	else
+		$book->checkOutDate = $date;
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>2. Functies: <br/>wat is een ideale functie?</h4>
+				</section>
+				<section>
+					<h4>2. Functies: verantwoordelijkheden</h4>
+					<pre><code>
+class Book {
+	function prolong($date, $person) {
+		// does only one thing: prolonging the book
+	}
+}
+					</code></pre>					
+				</section>
+				<section>
+					<h4>2. Functies: argumenten</h4>
+					<pre><code>
+function checkoutBook($title, $isbn, $person, $enoughCredit = FALSE) {
+	// ...
+}
+					</code></pre>
+					VS
+					<pre><code>
+class Person {
+	function checkoutBook($book) {
+		// ...
+	}
+}
+					</code></pre>										
+				</section>
+				<section>
+					<h4>2. Functies: Side effects</h4>
+					<pre><code>
+function prolong($date, $person) {
+	if($this->isOverDue()){
+		$person->credit -= 10;
+	}
+}
+					</code></pre>															
+				</section>
+
+				<section>-- oefeningen deel 1 --</section>
+				<section>-- oefening uitleg</section>
+				<section>-- phpunit korte uitleg (ahv. code zelf)</section>
+				<section>-- oefening oplossing; gezamelijke discussie</section>
+
+				<section>3. scoping; algemeen</section>
+				<section>3. scoping; toegespitst op php</section>
+
+				<section>4. OO design; algemeen</section>
+				<section>4. OO design; classes</section>
+				<section>4. OO design; error handling</section>
+
+				<section>-- oefeningen deel 2 --</section>
+				<section>-- oefening uitleg</section>
+				<section>-- oefening oplossing; gezamelijke discussie</section>
+
+				<section>80/20 principe: algemeen</section>
+				<section>pragmatic programmer principes (hoeveel slides/principes?)</section>
+
+				<section>---- DAG 2 ----</section>
+
+				<section>Clean code deel 3: Unit testing</section>
+				<section>waarom?</section>
+				<section>voordelen</section>
+				<section>definitie van een goede unit test (eigenschappen)</section>
+				<section>automatisch draaien! Build principe uitleg</section>
+				<section>"living documentation" principe</section>
+				<section>TDD</section>
+				<section>TDD live voorbeeld</section>
+				<section>"bugfix" edge case live voorbeeld</section>
+				<section>unit testing vs integration vs e2e testing</section>
+
+				<section>-- oefeningen dag 2 (groter) --</section>
+				<section>-- oefening uitleg</section>
+				<section>-- oefening oplossing; gezamelijke discussie</section>
+
+				<section>Bedankt voor uw aandacht</section>
+				<section>ellen.debrie@prato.be</section>
+
+				<section>resource pagina met urls etc (github link slides source + oefs)</section>
+
 			</div>
 		</div>
 
@@ -44,6 +234,10 @@
 					{ src: 'plugin/notes/notes.js', async: true },
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
+			});
+
+			document.querySelectorAll('code').forEach(function(block) {
+				block.className =  block.className + ' php';
 			});
 		</script>
 	</body>
