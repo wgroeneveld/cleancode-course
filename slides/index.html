@@ -8,6 +8,7 @@
 
 		<link rel="stylesheet" href="css/reveal.css">
 		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/prato.css">
 
 		<link rel="stylesheet" href="lib/css/zenburn.css">
 
@@ -26,52 +27,88 @@
 				<section>
 					<h1>Clean code</h1>
 					<h3></h3>
+					<blockquote style="background-color: white;">
+						<img src="img/logo.png"/>
+					</blockquote style="border: 1px solid white;">
 					<p>
-						<small>Prato NV</small>
+						<small>
+							Prato NV<br/>
+
+							<span style="font-size: 11pt;">
+								Luk Weyens &amp; Wouter Groeneveld<br/>
+								22/09/2016
+							</span>
+						</small>
 					</p>
 				</section>
-				<section>intro: gsm uit, braaf zijn, blabla, insert gif here</section>
-
-				<section>Inhoudsopgave: waar we het over gaan hebben</section>
-
-				<section>Clean code deel 1: definitie</section>
 				<section>
-				Wat is clean code?
-					<blockquote>
-					Clean code is code that is easy to understand and easy to change.
-					</blockquote>
+					<h2>Introductie</h2>
+					
+					<p>
+						<strong>GSM Uit</strong> aub
+					</p>
+					<p>
+						<strong>Verstand Aan</strong> aub<br/>
+						Vragen stellen toegelaten!
+					</p>
 				</section>
+
 				<section>
-					Wat is <b>niet</b> clean code?
-					<pre><code>
-		function process($obj, $continue = FALSE) {
-			// echo "starting the process";
-			if($obj->generate() == NULL) {
-				return -1;
+					<section>
+						<h2>Inhoudsopgave</h2>
+					</section>
+					<section>
+					<ol>
+					<li>Clean code: definities</li>
+					<li>Clean code: principes</li>
+					<li>Unit testing: definities</li>
+					<li>Unit testing: voorbeelden</li>
+					</ol>
+					</section>
+				</section>
+
+				<section><h2>Clean code deel 1: <br/>definitie</h2></section>
+				<section>
+					<section>
+					Wat is clean code?
+						<blockquote>
+						Clean code is code that is easy to understand and easy to change.
+						</blockquote>
+					</section>
+					<section>
+						Wat is <b>niet</b> clean code?
+						<pre><code>
+			function process($obj, $continue = FALSE) {
+				// echo "starting the process";
+				if($obj->generate() == NULL) {
+					return -1;
+				}
+				$result = $obj->generate();
+				if($continue) {
+					return $result->generate();
+				}
+				return $result;
 			}
-			$result = $obj->generate();
-			if($continue) {
-				return $result->generate();
-			}
-			return $result;
+						</code></pre>
+					</section>
+					<section>
+						Wat is <b>wel</b> clean code?
+						<pre><code>
+	function getBookByISBN($isbn) {
+		$book = array_search($isbn, $this->books);
+		if($book == FALSE) {
+			throw new BookNotFoundException("book was not found!");
 		}
-					</code></pre>
-				</section>
-				<section>
-					Wat is <b>wel</b> clean code?
-					<pre><code>
-function getBookByISBN($isbn) {
-	$book = array_search($isbn, $this->books);
-	if($book == FALSE) {
-		throw new BookNotFoundException("book was not found!");
+		return $book;
 	}
-	return $book;
-}
-					</code></pre>
-
+						</code></pre>
+					</section>
+					<section>
+					<img src="img/whocares.jpg"/>
+					</section>
 				</section>
 				<section>
-					<h3>Leesbaarheid!</h3>
+					<h4>Leesbaarheid!</h4>
 
 					<blockquote>
 Code gets read a lot (at least whenever
@@ -82,12 +119,17 @@ required to keep code clean.
 					</blockquote>
 				</section>
 
-				<section>Clean code deel 2: principes</section>
 				<section>
-					<h4>1. Naamgeving: wat is de ideale naamgeving?</h4>
+					<h4>Meetbaarheid: <br/>"aantal WTFs per minuut"</h4>
+					<img src="img/wtfsperminute.jpg" style="border: 4px solid lightgrey;" />
+				</section>
+
+				<section><h2>Clean code deel 2:<br/>principes</h2></section>
+				<section>
+					<h4>1. Naamgeving: <br/>wat is de ideale naamgeving?</h4>
 					<ul>
-						<li>Het moet correct weerspiegelen waar het voor dient</li>
-						<li>Het leunt aan bij de taal die gesproken wordt in het domein</li>
+						<li>Het moet correct weerspiegelen <strong>waar het voor dient</strong></li>
+						<li>Het leunt aan bij de <strong>taal</strong> die gesproken wordt in het <strong>domein</strong></li>
 					</ul>
 				</section>
 				<section>
@@ -95,44 +137,51 @@ required to keep code clean.
 					<pre><code>
 $result = $processor->process();
 					</code></pre>
+					VS
 					<pre><code>
 $order = $library->checkOut();
 					</code></pre>
 				</section>
 				<section>
-					<h4>1. Naamgeving: comments</h4>
-					<pre><code>
-/**
- *
- * Prolong the book
- *
- * @param    Book  		$i The book to prolong
- * @param    DateTime  		$j The date to prolong to
- * @param    Person		$k The person to prolong the book to
- * @return   nothing if OK
- *
- */
-function prolong($i, $j, $k) {
-	//Check if this book has been checked out by the same person
-	if($i->person != $k)
-		//BUSTED!
-		return "This is not a book you checked out."
-	else
-		//Everything OK, prolong the book
-		$book->checkOutDate = $date;
-}
-					</code></pre>
-				</section>
-				<section>
-					<h4>1. Naamgeving: comments</h4>
-					<pre><code>
-function prolong($book, $date, $person) {
-	if(!$book->isCheckedOutBy($person))
-		return "This is not a book you checked out."
-	else
-		$book->checkOutDate = $date;
-}
-					</code></pre>
+					<section>
+						<h4>1. Naamgeving: comments</h4>
+						<img src="img/codecomments.jpg"/>
+					</section>
+					<section>
+						<h4>1. Naamgeving: comments</h4>
+						<pre><code>
+	/**
+	 *
+	 * Prolong the book
+	 *
+	 * @param    Book  		$i The book to prolong
+	 * @param    DateTime  		$j The date to prolong to
+	 * @param    Person		$k The person to prolong the book to
+	 * @return   nothing if OK
+	 *
+	 */
+	function prolong($i, $j, $k) {
+		//Check if this book has been checked out by the same person
+		if($i->person != $k)
+			//BUSTED!
+			return "This is not a book you checked out."
+		else
+			//Everything OK, prolong the book
+			$book->checkOutDate = $date;
+	}
+						</code></pre>
+					</section>
+					<section>
+						<h4>1. Naamgeving: comments</h4>
+						<pre><code>
+	function prolong($book, $date, $person) {
+		if(!$book->isCheckedOutBy($person))
+			return "This is not a book you checked out."
+		else
+			$book->checkOutDate = $date;
+	}
+						</code></pre>
+					</section>
 				</section>
 
 				<section>
@@ -180,33 +229,258 @@ function prolong($date, $person) {
 				<section>-- phpunit korte uitleg (ahv. code zelf)</section>
 				<section>-- oefening oplossing; gezamelijke discussie</section>
 
-				<section>3. scoping; algemeen</section>
-				<section>3. scoping; toegespitst op php</section>
+				<section>
+					<h4>3. Scoping</h4>
+					<pre><code>
+public class BookRepository {
+	public $db;
+}
 
-				<section>4. OO design; algemeen</section>
-				<section>4. OO design; classes</section>
-				<section>4. OO design; error handling</section>
+$bookRepositoryInstance->db->query('where isOverdue = TRUE');
+					</code></pre>
+
+					VS 
+<pre><code>
+public class BookRepository {
+	private $db;
+	public function getOverdueBooks() {
+		return $db->query('where isOverdue = TRUE');
+	}
+}
+
+$bookRepositoryInstance->getOverdueBooks();
+					</code></pre>
+
+				</section>
+				<section>
+					<h4>3. Scoping</h4>
+					<pre><code>
+$checkoutDate = NULL;
+function isOverdue($book) {
+	global $checkoutDate;
+	// some domain logic here
+	$checkoutDate = new Date();
+}
+
+$book->setCheckoutDate($checkoutDate); 
+					</code></pre>
+
+					<p>
+					Zie ook:
+					<ul>
+						<li><pre>static</pre></li>
+						<li><pre>function(...) use (...)</pre></li>
+						<li>...</li>
+					</ul>
+					</p>
+				</section>
+				<section>
+					<h4>4. OO design</h4>
+
+					<pre><code>
+$bookid = $_POST['bookid'];
+function prolong($book, $date, $person) {
+		$book->checkOutDate = $date;
+		$person->bookList->push($book);
+	}
+}
+prolong($db->getby($bookid), $_POST['date'], $person);
+
+echo "<html><body>thank you it has been prolonged</body></html>"
+
+					</code></pre>
+				</section>
+				<section>
+					<h4>4. OO design</h4>
+					<pre><code>
+class Book {
+	function prolong($date, $person) {
+		$person->addToBookList($this);
+	}
+}
+$book = new Book();
+$book->prolong($_POST['date'], $person);
+$view->renderThankYouPage();
+					</code></pre>					
+
+					<pre><code>
+class BookTest extends PHPUnit_Framework_TestCase {
+	public void testProlongAddsToPersonBookList() {
+		// ...
+	}
+}
+					</code></pre>
+
+				</section>
+				<section>
+					<h4>4. OO design: polymorphism</h4>
+					<pre><code>
+function getAisle($book) {
+	switch($book->type) {
+		case 'nonficition': return 400;
+		case 'fiction': return 234;
+	}
+}
+					</code></pre>
+					VS
+					<pre><code>
+abstract class Book {
+	abstract public function getAisle();
+}
+class FictionBook extends Book {
+	function getAisle() {
+		return 234;
+	}
+}
+class NonFictionBook extends Book {
+	function getAisle() {
+		return 400;
+	}	
+}
+					</code></pre>					
+
+				</section>
+				<section data-background="img/trainwreck.gif">
+					<h4>4. OO design; Trainwrecks</h4>
+
+					<pre><code>
+$repository->getBookById(124)->getAuthor()->getAllBooks()->filterByName('train');
+					</code></pre>
+
+				</section>
+				<section>
+					<h4>4. OO design; Error handling</h4>
+
+					<pre><code>
+function getBookById($id) {
+	if($id == NULL) return -1;
+	return $db->getById($id);
+}
+					</code></pre>
+					VS
+					<pre><code>
+function getBookById($id) {
+	if($id == NULL) throw new InvalidIdException("id cannot be null!");
+	return $db->getById($id);
+}
+					</code></pre>
+				</section>
 
 				<section>-- oefeningen deel 2 --</section>
 				<section>-- oefening uitleg</section>
 				<section>-- oefening oplossing; gezamelijke discussie</section>
 
-				<section>80/20 principe: algemeen</section>
-				<section>pragmatic programmer principes (hoeveel slides/principes?)</section>
+				<section>
+					<h4>Het pareto principe</h4>
+					<strong>80%</strong> van het werk, met<br />
+					<strong>20%</strong> van de inspanning
+
+					<blockquote>
+						You cannot write perfect software. Therefore,
+						do not waste energy trying;
+						<br/>be pragmatic.
+					</blockquote>
+				</section>
+				<section>
+					<h4>DRY: Don't Repeat Yourself</h4>
+
+					<blockquote>
+ "Every piece of knowledge must have a
+single, unambiguous, authoritative
+representation within a system."						
+					</blockquote>
+				</section>
 
 				<section>---- DAG 2 ----</section>
 
-				<section>Clean code deel 3: Unit testing</section>
-				<section>waarom?</section>
-				<section>voordelen</section>
-				<section>definitie van een goede unit test (eigenschappen)</section>
-				<section>automatisch draaien! Build principe uitleg</section>
-				<section>"living documentation" principe</section>
-				<section>TDD</section>
-				<section>TDD live voorbeeld</section>
-				<section>"bugfix" edge case live voorbeeld</section>
-				<section>unit testing vs integration vs e2e testing</section>
+				<section>
+					<h2>Clean code deel 3: <br/>Unit testing</h2>
+					<img src="img/nunit.png"/>
+				</section>
+				<section>
 
+					<section>
+						<h4>Waarom unit testen?</h4>
+					</section>
+
+					<section>
+						<ul>
+						<li><strong>feedback!</strong></li>
+						<li>Denk in code vanuit API standpunt</li>
+						<li>Makkelijk voor pair om te volgen</li>
+						<li>Alle mogelijke paden gedekt</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h4>Eigenschappen van een goede test</h4>
+					<ul>
+					<li>Ontdek sneller bugs</li>
+					<li>Leesbaar</li>
+					<li>Geautomatiseerd</li>
+					<li>Snel &amp; gefocuset</li>
+					<li>Herhaalbaar</li>
+					<li>Volgorde onafhankelijk</li>
+					<li>Productie code makkelijker wijzigbaar</li>
+					</ul>
+				</section>
+				<section><h4>Eigenschappen van een goede test<br/>
+				Geautomatiseerd</h4>
+				<img src="img/teamcity.png"/>
+				</section>
+				<section><h4>Eigenschappen van een goede test<br/>
+				"living documentation"</h4>
+				<img src="img/livingdocumentation.png"/>
+				</section>
+				<section>
+					<h4>Test Driven Development (TDD)</h4>
+					<img src="img/tdd.png"/>
+				</section>
+				<section>TDD live voorbeeld</section>
+				<section data-background="img/abugslife.jpg">
+					<h4>TDD: "bugfix" edge case</h4>
+					live voorbeeld
+				</section>
+				<section>
+					<section>
+						<h4>Soorten testen</h4>
+						<p>&nbsp;</p>
+						<div style="padding-left: 300px;">
+							<div style="width: 100px; background-color: red">E2E</div>
+							<div style="width: 250px; background-color: orange">Integration</div>
+							<div style="width: 350px; background-color: green">Unit</div>
+						</div>
+					</section>
+					<section>
+						<h4 style="background-color: green">unit testing</h4>
+						<ul>
+						<li>Onafhankelijk van externen (db, webservice, ...)</li>
+						<li>Snel!</li>
+						<li>Véél testen</li>
+						<li>Test normaal pad &amp; limieten</li>
+						<li>"actieve vijand van de code"</li>
+						</ul>
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing</h4>
+						<ul>
+						<li>Test geïntegreerd met externen (db, webservice, ...)</li>
+						<li>Test integratie <strong>twee verschillende lagen</strong></li>
+						<li>Trager dan unit tests</li>
+						<li>Minder test cases</li>
+						</ul>
+					</section>
+					<section>
+						<h4 style="background-color: red">end to end testing</h4>
+						<ul>
+						<li>Test hele applicatie!</li>
+						<li>niet alle limieten</li>
+						<li>traag, moelijker onderhoudbaar</li>
+						<li>Test integratie <strong>alle</strong> lagen</li>
+						</ul>
+					</section>
+
+				</section>
 				<section>-- oefeningen dag 2 (groter) --</section>
 				<section>-- oefening uitleg</section>
 				<section>-- oefening oplossing; gezamelijke discussie</section>
@@ -218,7 +492,7 @@ function prolong($date, $person) {
 
 			</div>
 		</div>
-
+x
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.js"></script>
 
