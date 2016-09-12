@@ -29,7 +29,7 @@
 					<h3></h3>
 					<blockquote style="background-color: white;">
 						<img src="img/logo.png"/>
-					</blockquote style="border: 1px solid white;">
+					</blockquote>
 					<p>
 						<small>
 							Prato NV<br/>
@@ -230,17 +230,21 @@ function prolong($date, $person) {
 				<section>-- oefening oplossing; gezamelijke discussie</section>
 
 				<section>
-					<h4>3. Scoping</h4>
-					<pre><code>
-public class BookRepository {
-	public $db;
-}
+					<section>
+						<h4>3. Scoping - poging 1</h4>
+						<pre><code>
 
-$bookRepositoryInstance->db->query('where isOverdue = TRUE');
-					</code></pre>
+	public class BookRepository {
+		public $db;
+		public $bookCache = [];
+	}
 
-					VS 
-<pre><code>
+	$bookRepositoryInstance->db->query('where isOverdue = TRUE');
+						</code></pre>
+					</section>
+					<section>
+						<h4>3. Scoping - poging 2</h4>
+						<pre><code>
 public class BookRepository {
 	private $db;
 	public function getOverdueBooks() {
@@ -249,11 +253,12 @@ public class BookRepository {
 }
 
 $bookRepositoryInstance->getOverdueBooks();
-					</code></pre>
+						</code></pre>
+					</section>
 
 				</section>
 				<section>
-					<h4>3. Scoping</h4>
+					<h4>3. Scoping - global #fail</h4>
 					<pre><code>
 $checkoutDate = NULL;
 function isOverdue($book) {
@@ -266,79 +271,82 @@ $book->setCheckoutDate($checkoutDate);
 					</code></pre>
 
 					<p>
-					Zie ook:
-					<ul>
-						<li><pre>static</pre></li>
-						<li><pre>function(...) use (...)</pre></li>
-						<li>...</li>
-					</ul>
+					Zie ook 'static' e.a.
 					</p>
 				</section>
 				<section>
-					<h4>4. OO design</h4>
+					<section>
+						<h4>4. OO design - poging 1</h4>
 
-					<pre><code>
-$bookid = $_POST['bookid'];
-function prolong($book, $date, $person) {
-		$book->checkOutDate = $date;
-		$person->bookList->push($book);
+						<pre><code>
+	$bookid = $_POST['bookid'];
+	function prolong($book, $date, $person) {
+			$book->checkOutDate = $date;
+			$person->bookList->push($book);
+		}
 	}
-}
-prolong($db->getby($bookid), $_POST['date'], $person);
+	prolong($db->getby($bookid), $_POST['date'], $person);
 
-echo "<html><body>thank you it has been prolonged</body></html>"
+	echo "<html><body>thank you it has been prolonged</body></html>"
 
-					</code></pre>
+						</code></pre>
+					</section>
+					<section>
+						<h4>4. OO design - poging 2</h4>
+						<pre><code>
+	class Book {
+		function prolong($date, $person) {
+			$person->addToBookList($this);
+		}
+	}
+	$book = new Book();
+	$book->prolong($_POST['date'], $person);
+	$view->renderThankYouPage();
+						</code></pre>					
+
+						<pre><code>
+	class BookTest extends PHPUnit_Framework_TestCase {
+		public void testProlongAddsToPersonBookList() {
+			// ...
+		}
+	}
+						</code></pre>
+					</section>
 				</section>
 				<section>
-					<h4>4. OO design</h4>
-					<pre><code>
-class Book {
-	function prolong($date, $person) {
-		$person->addToBookList($this);
+					<section>
+						<h4>4. OO design: polymorphism - poging 1</h4>
+						<pre><code>
+	function getAisle($book) {
+		switch($book->type) {
+			case 'nonficition': return 400;
+			case 'fiction': return 234;
+		}
 	}
-}
-$book = new Book();
-$book->prolong($_POST['date'], $person);
-$view->renderThankYouPage();
-					</code></pre>					
 
-					<pre><code>
-class BookTest extends PHPUnit_Framework_TestCase {
-	public void testProlongAddsToPersonBookList() {
-		// ...
+	getAisle({ type: 'nonfiction' });
+						</code></pre>
+					</section>
+					<section>
+						<h4>4. OO design: polymorphism - poging 2</h4>
+						<pre><code>
+	abstract class Book {
+		abstract public function getAisle();
 	}
-}
-					</code></pre>
+	class FictionBook extends Book {
+		function getAisle() {
+			return 234;
+		}
+	}
+	class NonFictionBook extends Book {
+		function getAisle() {
+			return 400;
+		}	
+	}
 
-				</section>
-				<section>
-					<h4>4. OO design: polymorphism</h4>
-					<pre><code>
-function getAisle($book) {
-	switch($book->type) {
-		case 'nonficition': return 400;
-		case 'fiction': return 234;
-	}
-}
-					</code></pre>
-					VS
-					<pre><code>
-abstract class Book {
-	abstract public function getAisle();
-}
-class FictionBook extends Book {
-	function getAisle() {
-		return 234;
-	}
-}
-class NonFictionBook extends Book {
-	function getAisle() {
-		return 400;
-	}	
-}
-					</code></pre>					
-
+	new NonFictionBook()->getAisle();
+						</code></pre>					
+					</section>
 				</section>
 				<section data-background="img/trainwreck.gif">
 					<h4>4. OO design; Trainwrecks</h4>
@@ -349,21 +357,26 @@ $repository->getBookById(124)->getAuthor()->getAllBooks()->filterByName('train')
 
 				</section>
 				<section>
-					<h4>4. OO design; Error handling</h4>
+					<section>
+						<h4>4. OO design; Error handling - poging 1</h4>
+						<pre><code>
+	function getBookById($id) {
+		if($id == NULL) return -1;
 
-					<pre><code>
-function getBookById($id) {
-	if($id == NULL) return -1;
-	return $db->getById($id);
-}
-					</code></pre>
-					VS
-					<pre><code>
+		return $db->getById($id);
+	}
+						</code></pre>
+					</section>
+					<section>
+						<h4>4. OO design; Error handling - poging 2</h4>
+						<pre><code>
 function getBookById($id) {
 	if($id == NULL) throw new InvalidIdException("id cannot be null!");
+
 	return $db->getById($id);
 }
-					</code></pre>
+						</code></pre>
+					</section>
 				</section>
 
 				<section>-- oefeningen deel 2 --</section>
@@ -404,6 +417,7 @@ representation within a system."
 					</section>
 
 					<section>
+						<h4>Waarom unit testen?</h4>
 						<ul>
 						<li><strong>feedback!</strong></li>
 						<li>Denk in code vanuit API standpunt</li>
@@ -436,7 +450,6 @@ representation within a system."
 					<h4>Test Driven Development (TDD)</h4>
 					<img src="img/tdd.png"/>
 				</section>
-				<section>TDD live voorbeeld</section>
 				<section data-background="img/abugslife.jpg">
 					<h4>TDD: "bugfix" edge case</h4>
 					live voorbeeld
@@ -446,8 +459,8 @@ representation within a system."
 						<h4>Soorten testen</h4>
 						<p>&nbsp;</p>
 						<div style="padding-left: 300px;">
-							<div style="width: 100px; background-color: red">E2E</div>
-							<div style="width: 250px; background-color: orange">Integration</div>
+							<div style="width: 100px; background-color: red; margin-left: 125px;">E2E</div>
+							<div style="width: 250px; background-color: orange; margin-left: 50px;">Integration</div>
 							<div style="width: 350px; background-color: green">Unit</div>
 						</div>
 					</section>
@@ -485,14 +498,34 @@ representation within a system."
 				<section>-- oefening uitleg</section>
 				<section>-- oefening oplossing; gezamelijke discussie</section>
 
-				<section>Bedankt voor uw aandacht</section>
-				<section>ellen.debrie@prato.be</section>
+				<section data-background="img/thatsall.png">
+					
+				</section>
+				<section>
+					<blockquote style="background-color: white;">
+						<img src="img/logo.png"/>
+					</blockquote>				
+					<a href="http://www.prato.be" target="_blank">http://www.prato.be</a><br/>
+					<a href="mailto:vacatures@prato.be">vacatures@prato.be</a>
+				</section>
 
-				<section>resource pagina met urls etc (github link slides source + oefs)</section>
+				<section>
+					<h2>Resources</h2>
+
+					<span style="font-size: 16pt;">
+					<ul>
+					<li><a href="https://github.com/wgroeneveld/cleancode-course">https://github.com/wgroeneveld/cleancode-course</a></li>
+					<li><a href="http://www.inf.fu-berlin.de/inst/ag-se/teaching/K-CCD-2014/Clean-Code-summary.pdf">The Essence of clean code</a></li>
+					<li><a href="http://www.inf.fu-berlin.de/inst/ag-se/teaching/K-CCD-2014/Pragmatic-Programmer-summary.pdf">The Essence of pragmatic programmer</a></li>
+					<li><a href="https://blog.codinghorror.com/a-pragmatic-quick-reference/">A pragmatic programmer Quick reference card</a></li>
+					</ul>
+
+					<img src="img/cleancode.jpg"/>
+				</span>
+				</section>
 
 			</div>
 		</div>
-x
 		<script src="lib/js/head.min.js"></script>
 		<script src="js/reveal.js"></script>
 
