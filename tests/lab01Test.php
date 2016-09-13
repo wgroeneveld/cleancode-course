@@ -51,13 +51,6 @@ class Lab01Test extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(-1, $result);
 	}
 
-	public function testExecuteSithAgainstJediWins() {
-		$sith = $this->theEmpire->generate();
-		$jedi = $this->theEmpire->generate01();
-
-		$result = $sith->execute($jedi);
-		$this->assertEquals(1, $result);
-	}
 }
 
 ?>

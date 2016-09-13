@@ -1,8 +1,8 @@
 <?php
 
-require_once('labs/lab02BugfixLive.php');
+require_once('labs/period.php');
 
-class Lab02BugfixLiveTest extends PHPUnit_Framework_TestCase {
+class PeriodTest extends PHPUnit_Framework_TestCase {
 
 	public function testIsInPeriod_NaEindDatum_False() {
 		$period = new Period(new DateTime('2016-01-01'), new DateTime('2016-10-10'));

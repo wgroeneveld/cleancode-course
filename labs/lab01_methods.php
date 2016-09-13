@@ -2,7 +2,7 @@
 
 class Empire {
 
-	private $a;
+	public $a;
 
 	public function __construct() {
 		$this->a = [];

@@ -1,0 +1,23 @@
+<?php
+
+
+class Amazing {
+	public function wow($getal) {
+		return $getal + 1;
+	}
+}
+
+
+// hulp nodig? https://phpunit.de/manual/current/en/appendixes.assertions.html
+class AmazingTest extends PHPUnit_Framework_TestCase {
+
+	public function testWow_returnsGetalPlus1() {
+		$amazing = new Amazing();
+		$getal = $amazing->wow(456);
+
+		$this->assertEquals(457, $getal);
+	}
+
+}
+
+?>
