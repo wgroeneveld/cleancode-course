@@ -226,10 +226,42 @@ function prolong($date, $person) {
 					</code></pre>															
 				</section>
 
-				<section>-- oefeningen deel 1 --</section>
-				<section>-- oefening uitleg</section>
-				<section>-- phpunit korte uitleg (ahv. code zelf)</section>
-				<section>-- oefening oplossing; gezamelijke discussie</section>
+				<section>
+					<section data-background="img/lab1.jpg">
+						<h2>oefeningen deel 1</h2>
+					</section>
+					<section>
+						<h4>Oefeningen deel 1: story 1</h4>
+						<ul>
+						<li>Gegeven: <strong>Empire</strong>, <strong>Sith</strong>, <strong>Jedi</strong> classes vol funcs. </li>
+						<li>Uw taak: verduidelijken! Wat doet wat? Naamgeving!</li>
+						<li>Unit testen <span style="color: lightgreen;">groen houden</span>! (<span class="inlinecode">cmd: > phpunit tests</span>)</li>
+						</ul>
+					</section>
+					<section>
+						<h4>PHPUNIT - recap</h4>
+						live demo<br/>
+						<img src="img/phpunit.png"/>
+
+						<a href="https://phpunit.de/manual/current/en/appendixes.assertions.html" target="blank">http://phpunit.de/manual/</a>
+					</section>
+					<section>
+						<h4>Oefeningen deel 1: story 2</h4>
+						<ul>
+						<li>maak een <span class="inlinecode">function</span> op Empire, '<strong>convert($jedi)</strong>'<br/>&nbsp;&nbsp;&nbsp;Wat zou dit volgens u moeten doen?</li>
+						<li>maak een <span class="inlinecode">function</span> op Jedi, '<strong>equip($saber)</strong>'. <br/>&nbsp;&nbsp;&nbsp;Wat zou dit volgens u moeten doen?</li>
+						<li>Vergeet niet de testen uit te breiden!</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Oefeningen deel 1 - discussie</h4>
+						<ul>
+						<li>Zijn alle testen <span style="color: lightgreen;">nog groen</span>? Heb je er <strong>bijgeschreven</strong>?</li>
+						<li>Naamgeving - ook doorgevoerd in testen?</li>
+						<li>Onthou principes voor volgende oefeningen!</li>
+						</ul>
+					</section>
+				</section>
 
 				<section>
 					<section>
@@ -273,7 +305,7 @@ $book->setCheckoutDate($checkoutDate);
 					</code></pre>
 
 					<p>
-					Zie ook 'static' e.a.
+					Zie ook <span class="inlinecode">static</span> e.a.
 					</p>
 				</section>
 				<section>
@@ -382,14 +414,69 @@ function getBookById($id) {
 				</section>
 
 				<section>
-					<h4>"Refactoring"</h4>
+					<h4>Refactoring</h4>
 					<p>Structuur veranderen, zonder inhoud te wijzigen!</p>
 					<img src="img/refactoring.jpg"/>
 				</section>
 
-				<section>-- oefeningen deel 2 --</section>
-				<section>-- oefening uitleg</section>
-				<section>-- oefening oplossing; gezamelijke discussie</section>
+				<section>
+					<section data-background="img/lab2.jpg">
+						<h2>Oefeningen deel 2</h2>
+					</section>
+
+					<section>
+						<h4>Dierentuin - story 1</h4>
+
+						<ul>
+						<li>maak een <strong>Dierentuin</strong> class</li>
+						<li>kan verschillende <strong>Dieren</strong> (<span class="inlinecode">class</span>) <strong>ontvangen</strong> (<span class="inlinecode">function</span>)</li>
+						<li>elk dier heeft een <strong>grootte</strong> en <strong>naam</strong>: <br/>Neushoorn (40), Giraf(25), Poema (10)</li>
+						<li>elke dierentuin heeft x <i>beschikbareRuimte</i> afhankelijk van <i>grootte</i> van het dier<br/>wat doe je bij het ontvangen van een te groot dier?
+						</ul>
+
+						<pre><code>
+class Dierentuin {
+	public function bezoek() {
+		// return [] of dieren
+	}
+	public function ontvangDier($dier) {
+		// ??
+	}
+}
+						</code></pre>
+					</section>
+
+					<section>
+						<h4>Dierentuin - story 2</h4>
+
+						<ul>
+						<li><strong>voeder</strong> functie op dierentuin<br/>
+						return <span class="inlinecode">TRUE</span> of <span class="inlinecode">FALSE</span> indien genoeg voedsel voor elk ontvangen dier in de tuin</li>
+						<li>voedsel heeft een <strong>voedingswaarde</strong><br/>
+						Elk dier eet even veel waarde als zijn grootte</li>
+						<li>Verzin voedsel implementaties om alle edge cases te kunnen testen!</li>
+						</ul>
+
+						<pre><code>
+class Dierentuin {
+	public function voeder($voedsel) {
+		return TRUE;	// ??
+	}
+}
+						</code></pre>
+
+					</section>
+					<section>
+						<h4>Dierentuin - discussie</h4>
+
+						<ul>
+						<li>Polymorfisme niet vergeten?</li>
+						<li>Genoeg testen geschreven voor elk geval?</li>
+						<li>Exceptions gebruikt ipv return code?</li>
+						</ul>
+					</section>
+
+				</section>
 
 				<section>
 					<h4>Het pareto principe</h4>
@@ -461,7 +548,7 @@ representation within a system."
 				</section>
 				<section data-background="img/abugslife.jpg">
 					<h4>TDD: "bugfix" edge case</h4>
-					live voorbeeld
+					live demo
 				</section>
 				<section>
 					<section>
