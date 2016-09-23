@@ -1,3 +1,5 @@
+[![Build status](https://travis-ci.org/wgroeneveld/cleancode-course.svg?branch=master)](https://travis-ci.org/wgroeneveld/cleancode-course)
+
 # Clean Code courses
 
 Based on our own experience and books we've read. 
