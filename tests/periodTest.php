@@ -8,8 +8,18 @@ class PeriodTest extends PHPUnit_Framework_TestCase {
 		date_default_timezone_set('Europe/Brussels');
 	}
 
-	public function testForDisplayingPurposes() {
-		$this->assertEquals(1, 2);
+	public function testIsInPeriod_ExtactOpDeEindDatum_True() {
+		$period = new Period(new DateTime('2016-01-01'), new DateTime('2016-10-10'));
+		$datum = new DateTime('2016-10-10');
+
+		$this->assertEquals(TRUE, $period->isInPeriod($datum));		
+	}
+
+	public function testIsInPeriod_ExactOpDeBeginDatum_True() {
+		$period = new Period(new DateTime('2016-01-01'), new DateTime('2016-10-10'));
+		$datum = new DateTime('2016-01-01');
+
+		$this->assertEquals(TRUE, $period->isInPeriod($datum));
 	}
 
 	public function testIsInPeriod_NaEindDatum_False() {

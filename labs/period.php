@@ -20,7 +20,7 @@ class Period {
 	}
 
 	public function IsInPeriod($date) {
-		return $this->beginDate < $date && $this->endDate > $date;
+		return $this->beginDate <= $date && $this->endDate >= $date;
 	}
 }
 
