@@ -4,6 +4,10 @@ require_once('labs/period.php');
 
 class PeriodTest extends PHPUnit_Framework_TestCase {
 
+	public function setUp() {
+		date_default_timezone_set('Europe/Brussels');
+	}
+
 	public function testIsInPeriod_NaEindDatum_False() {
 		$period = new Period(new DateTime('2016-01-01'), new DateTime('2016-10-10'));
 
