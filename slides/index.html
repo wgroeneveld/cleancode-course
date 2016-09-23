@@ -590,9 +590,105 @@ representation within a system."
 					</section>
 
 				</section>
-				<section>-- oefeningen dag 2 (groter) --</section>
-				<section>-- oefening uitleg</section>
-				<section>-- oefening oplossing; gezamelijke discussie</section>
+				<section>
+					<section data-background="img/spreadsheet.jpg">
+						<h2 style="color: black;">OEFENING:<br/>SPREADSHEET</h2>
+					</section>
+					<section>
+						<h4>Story 1: simple spreadsheet</h4>
+
+						<ul>
+						<li>Onbeperkt aantal rijen/kolommen</li>
+						<li>Rij = nummer 1 -> 9999...</li>
+						<li>Kolom = Cijfer A -> Z, AA -> ZZ, ...</li>
+						<li>Cellen zijn standaard leeg ("")</li>
+						<li>Cellen kunnen tekst opslaan</li>
+						<li>Mogelijk om inhoud van cel uit te lezen</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Story 2: numerics and literal values</h4>
+
+						<ul>
+						<li><strong>Numerische</strong> cellen worden automatisch herkend:<br/>
+						Tekst "  124  " (met spaties) wordt het getal 124 (zonder spaties)</li>
+						<li>Mogelijk om <strong>literaire</strong> inhoud van cel uit te lezen<br/>
+						Cel met tekst "  124  " heeft literaire waarde "  124  " en waarde 124</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Story 3: Formulas</h4>
+
+						<ul>
+						<li>"=234" is een formule, " =234" (spatie) is tekst</li>
+						<li>Waarde van formule "=234" is het getal 234. Literaire waarde = de formule</li>
+						<li>Soorten:
+							<ol>
+							<li>Constanten =124</li>
+							<li>Met haakjes =((124))</li>
+							<li>Simpele berekeningen =3+5, =5-3, =4*2</li>
+							<li>Complexe berekeningen =7*(2+3)*((((2+1))))</li>
+							</ol>
+						</ul>
+					</section>
+					<section>
+						<h4>Story 3: Formulas - berekeningen</h4>
+
+						<pre><code>
+	public function testFormula_evaluatesSimpleCalculation() {
+		$formula = "3+5";
+
+		$this->assertEquals(8, eval('return ' . $formula . ';'));
+	}
+
+						</code></pre>
+
+						Gebruik <strong>nooit</strong> <span class="inlinecode">eval()</span> in productiecode!<br/>
+						Waarom niet?
+					</section>
+					<section>
+						<h4>Story 4: Formula errors</h4>
+
+						Wanneer een formule een fout bevat, moet de waarde van de cel "<strong>#ERROR</strong>" zijn.
+
+						<br/><br/>
+
+						bvb. <span class="inlinecode">=((124)-())</span> of <span class="inlinecode">=7*</span> of delen door 0.
+					</section>
+					<section>
+						<h4>Story 5: dependencies</h4>
+
+						<span class="inlinecode">=A2</span><br/><br/>
+						<ul>
+						<li>Waarde = waarde van cel waar je naar verwijst.</li>
+						<li>Indien waarde A2 verandert, verandert deze cel ook.</li>
+						<li>Referenties naar referenties = mogelijk! A1 -> A2 -> A3</li>
+						<li>Circulaire referneties vermijden.<br/>
+						 Geef "<strong>#CIRCULAR</strong>" fout als waarde.</li>
+						</ul>
+
+					</section>
+					<section>
+						<h4>Story 6: Functions</h4>
+
+						<ul>
+						<li><span class="inlinecode">Sum(range)</span><br/>
+						Bijvoorbeeld <span class="inlinecode">=SUM(A1:A6)</span></li>
+						<li><span class="inlinecode">Average(range)</span><br/>
+						Bijvoorbeeld <span class="inlinecode">=AVG(A1:D1)</span></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Spreadsheet - discussie</h4>
+
+						<ul>
+						<li>Genoeg testen geschreven voor elk geval?</li>
+						<li>Exceptions gebruikt ?</li>
+						<li>Is je code leesbaar voor je buurman?</li>
+						<li>Was dit makkelijker met focus op schrijven van testen of niet?</li>
+						</ul>					
+					</section>
+				</section>
 
 				<section data-background="img/thatsall.png">
 					
