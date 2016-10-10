@@ -690,6 +690,250 @@ representation within a system."
 					</section>
 				</section>
 
+				<section>---- DAG 3 ----</section>
+
+				<section><h2>Clean code herhaling (JS):<br/>principes</h2></section>
+				<section>
+					<h4>1. Naamgeving: methods/variabelen</h4>
+
+					<pre><code>
+	function render() {
+		renderRest();
+	}
+	function renderRest() {
+		document.getElementById('#ak').innerHTML = 'wow';
+	}
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>2. Functies: verantwoordelijkheden</h4>
+
+					<pre><code>
+	function getBodyElements() {
+		return document.querySelector('.body').forEach(function(i) {
+			bodies++;	// ???
+		});
+	}
+					</code></pre>
+					VS
+
+					<pre><code>
+	function getBodyElements() {
+		return documents.querySelector('.body');
+	}
+	function getAmountOfBodyElements() {
+		return getBodyElements().length;
+	}
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>2. Functies: argumenten</h4>
+					<pre><code>
+	function callback() {
+		if(arguments[0]) {
+			doSomethingWithArg0();
+		}
+		if(arguments[1]) {
+			extraFlag = true;
+		}
+	}
+					</code></pre>
+					VS
+
+					<pre><code>
+	function callback(object, extraFlag) {
+		// ...
+	}
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>2. Functies: Side effects</h4>
+					<pre><code>
+	function callback() {
+		if(!rendered) {
+			reRenderContent();
+		}
+		rendered = true;
+	}
+					</code></pre>
+
+					Vergeet niet dat dit op <span class="inlinecode">window</span> scope komt!
+				</section>
+
+				<section>
+					<section>
+						<h4>3. Scoping - poging 1</h4>
+
+						<pre><code>
+	var obj = {
+		isRendered: false,
+
+		render: function() {
+			if(!this.isRendered) {
+				refresh();
+			}
+			this.isRendered = true;
+		}
+	};
+						</code></pre>
+
+						Is <span class="inlinecode">isRendered</span> voldoende afgeschermd?
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 1</h4>
+						Het antwoord is <strong>Neen</strong>:<br/><br/>
+
+						<ol>
+						<li><span class="inlinecode">delete obj.isRendered</span> en *POOF*</li>
+						<li><span class="inlinecode">obj.isRendered = true</span> en *POOF*</li>
+						</ol>
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 2</h4>
+
+						<pre><code>
+	obj = (function() {
+		var isRendered = false;
+		var render = function() {
+			// ...
+		}
+
+		return {
+			render: render
+		};
+	})();
+						</code></pre>
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 2</h4>
+
+						<pre><code>
+	(function() {
+		// niemand kan aan mij! FUNCTION LEVEL SCOPE
+	})();
+						</code></pre>
+						Expose enkel wat jij wil als publieke interface:
+
+						<pre><code>
+	myAPI = (function() {
+		return {
+			// enkel DIT is aanspreekbaar
+		};
+	})();
+						</code></pre>
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 3</h4>
+
+						Pas op met PHP! 
+
+						<pre><code>
+	function main() {
+	    if (1) {
+	        $i = 3;
+	    }
+	    echo $i;
+	}
+	main();			// wat doet dit?
+						</code></pre>
+
+						VS een taal als C:
+
+						<pre><code>
+	void main() {
+	    if (1) {
+	        int i = 3;
+	    }
+	    printf("%d", i);	// wat doet dit?
+	}
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h4>4. OO design - poging 1</h4>
+
+						<pre><code>
+
+	var bookid = document.querySelector('#bookid').innerHTML;
+	var prolong = function(book, date, person) {
+			book.checkOutDate = date;
+			person.bookList.push(book);
+		}
+	};
+	doAjaxCall('getBookById.json', bookid, function(book) {
+		prolong(book, someDate, person);
+	});
+	document.querySelector('#messages').innerHTML = "thank you";
+
+						</code></pre>
+						Wat gaat er mis?
+					</section>
+					<section>
+						<h4>4. OO design - poging 2</h4>
+						<pre><code>
+	var Book = {
+		prolong: function(date, person) {
+			person.addToBookList(this);
+		}
+	};
+	var book = Object.create(Book);
+	book.prolong(someDate, person);
+	view.renderThankYouPage();
+						</code></pre>					
+
+						<pre><code>
+	describe("Book tests", function() {
+	  it("should add book to person list", function() {
+	  	var book = Object.create(Book);
+	  	book.prolong(someDate, person);
+
+	    expect(person.getBookList()).toContain(book);
+	  });
+	});						
+						</code></pre>
+					</section>
+					<section>
+						<h4>4. OO design - poging 2</h4>
+
+						<p>
+							Héél belangrijk in goed onderhoudbare JS code:
+						</p>
+
+						<p>
+							<ol>
+							<li>Scheiding domein/callbacks - async stuff</li>
+							<li>Scheiding domein/front - DOM manipulatie</li>
+							</ol>
+						</p>
+
+						<p>
+							Moeilijk testbare code => beter eerst testen geschreven??
+						</p>
+					</section>
+				</section>
+
+				<section>
+					Oefeningen JS
+				</section>
+
+				<section>
+					Jasmine uitleg
+				</section>
+
+				<section>
+					oefeningen jasmine? of integreren?
+				</section>
+
+
 				<section data-background="img/thatsall.png">
 					
 				</section>
