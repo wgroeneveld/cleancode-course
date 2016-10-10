@@ -923,10 +923,6 @@ representation within a system."
 				</section>
 
 				<section>
-					Oefeningen JS
-				</section>
-
-				<section>
 					<section>
 						<h4>Unit testing in JS</h4>
 						<p>
@@ -944,11 +940,78 @@ representation within a system."
 						Beschrijft <strong>gedrag</strong>
 					</section>
 
-				<section data-background="img/abugslife.jpg">
-					<h4>TDD: "bugfix" edge case</h4>
-					live demo - remember "Period"?
+					<section data-background="img/abugslife.jpg">
+						<h4>TDD: "bugfix" edge case</h4>
+						live demo - remember "Period"?
+					</section>
 				</section>
 
+				<section>
+					<section data-background="img/lab3.jpg">
+						<h2>Oefening - HERWERKEN IN JS</h2>
+					</section>
+
+					<section>
+						<h4>Dierentuin - story 1 - remember?</h4>
+
+						<ul>
+						<li>maak een <strong>Dierentuin</strong> object</li>
+						<li>kan verschillende <strong>Dieren</strong> (<span class="inlinecode">object</span>) <strong>ontvangen</strong> (<span class="inlinecode">function</span>)</li>
+						<li>elk dier heeft een <strong>grootte</strong> en <strong>naam</strong>: <br/>Neushoorn (40), Giraf(25), Poema (10)</li>
+						<li>elke dierentuin heeft x <i>beschikbareRuimte</i> afhankelijk van <i>grootte</i> van het dier<br/>wat doe je bij het ontvangen van een te groot dier?
+						</ul>
+
+						<pre><code>
+var Dierentuin = {
+	bezoek: function() {
+		// return [] of dieren
+	}
+	ontvangDier: function(dier) {
+		// ??
+	}
+}
+						</code></pre>
+					</section>
+
+					<section>
+						<h4>Dierentuin - story 2</h4>
+
+						<ul>
+						<li><strong>voeder</strong> functie op dierentuin<br/>
+						return <span class="inlinecode">true</span> of <span class="inlinecode">false</span> indien genoeg voedsel voor elk ontvangen dier in de tuin</li>
+						<li>voedsel heeft een <strong>voedingswaarde</strong><br/>
+						Elk dier eet even veel waarde als zijn grootte</li>
+						<li>Verzin voedsel implementaties om alle edge cases te kunnen testen!</li>
+						</ul>
+
+						<pre><code>
+var Dierentuin = {
+	voeder: function(voedsel) {
+		return true;	// ??
+	}
+}
+						</code></pre>
+
+					</section>
+					<section>
+						<h4>Dierentuin - discussie</h4>
+
+						<ul>
+						<li>Hoe heb je je objecten als instanties aangemaakt?</li>
+						<li>Genoeg testen geschreven voor elk geval?</li>
+						<li>Was dit makkelijk van PHP naar JS over te zetten?</li>
+						<li>Gedacht aan scoping?</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>JS Resources</h2>
+
+					<p>
+					Eerst leren kruipen, dan lopen!
+					</p>
+
+					<img src="img/jsthegoodparts.jpg"/>
 				</section>
 
 				<section>
@@ -1029,6 +1092,9 @@ it("should call prolong from repository", function() {
 
 				</section>
 
+				<section>
+					<h2>oefening - project bekijken van elkaar - switch van laptop!</h2>
+				</section>
 
 				<section data-background="img/thatsall.png">
 					
