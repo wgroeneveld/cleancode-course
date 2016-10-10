@@ -912,6 +912,7 @@ representation within a system."
 							<ol>
 							<li>Scheiding domein/callbacks - async stuff</li>
 							<li>Scheiding domein/front - DOM manipulatie</li>
+							<li>Scheiding domein/frameworks - niet (makkelijk) testbaar!</li>
 							</ol>
 						</p>
 
@@ -926,11 +927,106 @@ representation within a system."
 				</section>
 
 				<section>
-					Jasmine uitleg
+					<section>
+						<h4>Unit testing in JS</h4>
+						<p>
+							<a href="http://jasmine.github.io/2.5/introduction.html" target="_blank"><img src="img/jasmine-horizontal.png" alt="jasmine logo" /></a>
+						</p>
+
+						<pre><code>
+		describe("A suite", function() {
+		  it("contains spec with an expectation", function() {
+		    expect(true).toBe(true);
+		  });
+		});
+						</code></pre>
+
+						Beschrijft <strong>gedrag</strong>
+					</section>
+
+				<section data-background="img/abugslife.jpg">
+					<h4>TDD: "bugfix" edge case</h4>
+					live demo - remember "Period"?
+				</section>
+
 				</section>
 
 				<section>
-					oefeningen jasmine? of integreren?
+					<section>
+						<h4 style="background-color: orange">integration testing - remember?</h4>
+						<ul>
+						<li>Test geïntegreerd met externen (db, webservice, ...)</li>
+						<li>Test integratie <strong>twee verschillende lagen</strong></li>
+						<li>Trager dan unit tests</li>
+						<li>Minder test cases</li>
+						</ul>
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - hoe één stukje testen?</h4>
+
+						<pre><code>
+	var Book = {
+		prolong: function(person) {
+			var date = Date.now();
+			this.dbHandle.prolong(date, person.id);
+		}
+	};
+						</code></pre>
+
+						Ik heb <span class="inlinecode">dbHandle.prolong()</span> apart getest, wat nu?
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - hoe één stukje testen?</h4>						
+
+						<p>
+							Injecteer een andere dbHandle: een "<strong>mock</strong>".
+						</p>
+
+						<pre><code>
+ 	var book = Object.create(Book);
+ 	book.dbHandle = {
+ 		prolong: function(date, personId) {
+ 			// Captured arguments! Assert stuff here
+ 		}
+ 	};
+						</code></pre>
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - met Jasmine</h4>						
+
+
+						<p>
+						Laat Jasmine "spies" aanmaken<br/>
+						<a href="http://jasmine.github.io/2.5/introduction.html#section-Spies" target="_blank">http://jasmine.github.io/2.5/introduction.html#section-Spies</a>
+						</p>
+
+						<pre><code>
+it("should call prolong from repository", function() {
+	var dbHandle = jasmine.createSpyObj('dbHandle', ['prolong']);
+	book.dbHandle = dbHandle;
+	book.prolong(person);
+
+	expect(dbHandle.prolong).ToHaveBeenCalledWith(
+		jasmine.any(Date), 
+		person.id);
+});
+						</code></pre>
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - met PHPUnit</h4>
+						<p><a href="https://phpunit.de/manual/current/en/test-doubles.html" target="_blank">https://phpunit.de/manual/current/en/test-doubles.html</a></p>
+
+						<pre><code>
+    public function testStub()
+    {
+        $mock = $this->createMock(SomeClass::class);
+        $mock->method('doSomething')->willReturn('foo');
+
+        $this->assertEquals('foo', $mock->doSomething());
+    }
+						</code></pre>
+					</section>
+
 				</section>
 
 
