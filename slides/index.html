@@ -994,6 +994,31 @@ var Dierentuin = {
 
 					</section>
 					<section>
+						<h4>Dierentuin - story 3</h4>
+
+						<p>
+							Hoe los je inheritance op in JS? (Een Neushoorn is een Dier)
+						</p>
+
+						<pre><code>
+var Dier = { };
+var Neushoorn = Object.create(Dier);
+var eenNeushoorn = Object.create(Neushoorn, { grootte: { value: 10 } });
+						</code></pre>
+
+						Want:
+
+						<pre><code>
+it("should inerit each other", function() {
+	expect(Object.getPrototypeOf(Dier)).toBe(Object.prototype);
+	expect(Object.getPrototypeOf(Neushoorn)).toBe(Dier);
+	expect(Object.getPrototypeOf(eenNeushoorn)).toBe(Neushoorn);
+});
+						</code></pre>
+						Herwerk je code!<br/>
+						<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">Zie Mozilla Developer Network</a>.
+					</section>
+					<section>
 						<h4>Dierentuin - discussie</h4>
 
 						<ul>
@@ -1012,6 +1037,9 @@ var Dierentuin = {
 					</p>
 
 					<img src="img/jsthegoodparts.jpg"/>
+				</section>
+				<section data-background="img/fail.jpg">
+					&nbsp;
 				</section>
 
 				<section>
@@ -1088,6 +1116,40 @@ it("should call prolong from repository", function() {
         $this->assertEquals('foo', $mock->doSomething());
     }
 						</code></pre>
+					</section>
+
+					<section>
+						<h4 style="background-color: orange">integration testing - in Symphony</h4>
+
+						<p>
+						Welke stukken kan ik op die manier testen...<br/>
+						in een <strong>Symphony</strong> project?<br/><br/>
+
+						<img src="img/symphony.png" alt="symphony logo"/>
+						</p>
+					</section>
+
+					<section>
+						<h4 style="background-color: orange">integration testing - in Symphony</h4>
+
+						<ul>
+						<li>De entityManager <span class="inlinecode">ObjectManager</span> klasse</li>
+						<li>Stukjes domein logica uit controllers halen die elders getest zijn</li>
+						<li>...</li>
+						</ul>
+
+						<pre><code>
+      $bookRepositoryMock = $this->getMockBuilder(EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+      $bookRepositoryMock->expects($this->once())
+            ->method('find')
+            ->will($this->returnValue($book));
+
+     $bookController = new BookController($bookRepositoryMock);
+						</code></pre>
+
+						<a href="http://symfony.com/doc/current/testing/database.html" target="_blank">http://symfony.com/doc/current/testing/database.html</a>
 					</section>
 
 				</section>
