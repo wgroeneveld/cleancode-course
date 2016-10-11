@@ -590,9 +590,573 @@ representation within a system."
 					</section>
 
 				</section>
-				<section>-- oefeningen dag 2 (groter) --</section>
-				<section>-- oefening uitleg</section>
-				<section>-- oefening oplossing; gezamelijke discussie</section>
+				<section>
+					<section data-background="img/spreadsheet.jpg">
+						<h2 style="color: black;">OEFENING:<br/>SPREADSHEET</h2>
+					</section>
+					<section>
+						<h4>Story 1: simple spreadsheet</h4>
+
+						<ul>
+						<li>Onbeperkt aantal rijen/kolommen</li>
+						<li>Rij = nummer 1 -> 9999...</li>
+						<li>Kolom = Cijfer A -> Z, AA -> ZZ, ...</li>
+						<li>Cellen zijn standaard leeg ("")</li>
+						<li>Cellen kunnen tekst opslaan</li>
+						<li>Mogelijk om inhoud van cel uit te lezen</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Story 2: numerics and literal values</h4>
+
+						<ul>
+						<li><strong>Numerische</strong> cellen worden automatisch herkend:<br/>
+						Tekst "  124  " (met spaties) wordt het getal 124 (zonder spaties)</li>
+						<li>Mogelijk om <strong>literaire</strong> inhoud van cel uit te lezen<br/>
+						Cel met tekst "  124  " heeft literaire waarde "  124  " en waarde 124</li>
+						</ul>
+					</section>
+					<section>
+						<h4>Story 3: Formulas</h4>
+
+						<ul>
+						<li>"=234" is een formule, " =234" (spatie) is tekst</li>
+						<li>Waarde van formule "=234" is het getal 234. Literaire waarde = de formule</li>
+						<li>Soorten:
+							<ol>
+							<li>Constanten =124</li>
+							<li>Met haakjes =((124))</li>
+							<li>Simpele berekeningen =3+5, =5-3, =4*2</li>
+							<li>Complexe berekeningen =7*(2+3)*((((2+1))))</li>
+							</ol>
+						</ul>
+					</section>
+					<section>
+						<h4>Story 3: Formulas - berekeningen</h4>
+
+						<pre><code>
+	public function testFormula_evaluatesSimpleCalculation() {
+		$formula = "3+5";
+
+		$this->assertEquals(8, eval('return ' . $formula . ';'));
+	}
+
+						</code></pre>
+
+						Gebruik <strong>nooit</strong> <span class="inlinecode">eval()</span> in productiecode!<br/>
+						Waarom niet?
+					</section>
+					<section>
+						<h4>Story 4: Formula errors</h4>
+
+						Wanneer een formule een fout bevat, moet de waarde van de cel "<strong>#ERROR</strong>" zijn.
+
+						<br/><br/>
+
+						bvb. <span class="inlinecode">=((124)-())</span> of <span class="inlinecode">=7*</span> of delen door 0.
+					</section>
+					<section>
+						<h4>Story 5: dependencies</h4>
+
+						<span class="inlinecode">=A2</span><br/><br/>
+						<ul>
+						<li>Waarde = waarde van cel waar je naar verwijst.</li>
+						<li>Indien waarde A2 verandert, verandert deze cel ook.</li>
+						<li>Referenties naar referenties = mogelijk! A1 -> A2 -> A3</li>
+						<li>Circulaire referneties vermijden.<br/>
+						 Geef "<strong>#CIRCULAR</strong>" fout als waarde.</li>
+						</ul>
+
+					</section>
+					<section>
+						<h4>Story 6: Functions</h4>
+
+						<ul>
+						<li><span class="inlinecode">Sum(range)</span><br/>
+						Bijvoorbeeld <span class="inlinecode">=SUM(A1:A6)</span></li>
+						<li><span class="inlinecode">Average(range)</span><br/>
+						Bijvoorbeeld <span class="inlinecode">=AVG(A1:D1)</span></li>
+						</ul>
+					</section>
+					<section>
+						<h4>Spreadsheet - discussie</h4>
+
+						<ul>
+						<li>Genoeg testen geschreven voor elk geval?</li>
+						<li>Exceptions gebruikt ?</li>
+						<li>Is je code leesbaar voor je buurman?</li>
+						<li>Was dit makkelijker met focus op schrijven van testen of niet?</li>
+						</ul>					
+					</section>
+				</section>
+
+				<section>---- DAG 3 ----</section>
+
+				<section><h2>Clean code herhaling (JS):<br/>principes</h2></section>
+				<section>
+					<h4>1. Naamgeving: methods/variabelen</h4>
+
+					<pre><code>
+	function render() {
+		renderRest();
+	}
+	function renderRest() {
+		document.getElementById('#ak').innerHTML = 'wow';
+	}
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>2. Functies: verantwoordelijkheden</h4>
+
+					<pre><code>
+	function getBodyElements() {
+		return document.querySelector('.body').forEach(function(i) {
+			bodies++;	// ???
+		});
+	}
+					</code></pre>
+					VS
+
+					<pre><code>
+	function getBodyElements() {
+		return documents.querySelector('.body');
+	}
+	function getAmountOfBodyElements() {
+		return getBodyElements().length;
+	}
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>2. Functies: argumenten</h4>
+					<pre><code>
+	function callback() {
+		if(arguments[0]) {
+			doSomethingWithArg0();
+		}
+		if(arguments[1]) {
+			extraFlag = true;
+		}
+	}
+					</code></pre>
+					VS
+
+					<pre><code>
+	function callback(object, extraFlag) {
+		// ...
+	}
+					</code></pre>
+				</section>
+
+				<section>
+					<h4>2. Functies: Side effects</h4>
+					<pre><code>
+	function callback() {
+		if(!rendered) {
+			reRenderContent();
+		}
+		rendered = true;
+	}
+					</code></pre>
+
+					Vergeet niet dat dit op <span class="inlinecode">window</span> scope komt!
+				</section>
+
+				<section>
+					<section>
+						<h4>3. Scoping - poging 1</h4>
+
+						<pre><code>
+	var obj = {
+		isRendered: false,
+
+		render: function() {
+			if(!this.isRendered) {
+				refresh();
+			}
+			this.isRendered = true;
+		}
+	};
+						</code></pre>
+
+						Is <span class="inlinecode">isRendered</span> voldoende afgeschermd?
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 1</h4>
+						Het antwoord is <strong>Neen</strong>:<br/><br/>
+
+						<ol>
+						<li><span class="inlinecode">delete obj.isRendered</span> en *POOF*</li>
+						<li><span class="inlinecode">obj.isRendered = true</span> en *POOF*</li>
+						</ol>
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 2</h4>
+
+						<pre><code>
+	obj = (function() {
+		var isRendered = false;
+		var render = function() {
+			// ...
+		}
+
+		return {
+			render: render
+		};
+	})();
+						</code></pre>
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 2</h4>
+
+						<pre><code>
+	(function() {
+		// niemand kan aan mij! FUNCTION LEVEL SCOPE
+	})();
+						</code></pre>
+						Expose enkel wat jij wil als publieke interface:
+
+						<pre><code>
+	myAPI = (function() {
+		return {
+			// enkel DIT is aanspreekbaar
+		};
+	})();
+						</code></pre>
+					</section>
+
+					<section>
+						<h4>3. Scoping - poging 3</h4>
+
+						Pas op met PHP! 
+
+						<pre><code>
+	function main() {
+	    if (1) {
+	        $i = 3;
+	    }
+	    echo $i;
+	}
+	main();			// wat doet dit?
+						</code></pre>
+
+						VS een taal als C:
+
+						<pre><code>
+	void main() {
+	    if (1) {
+	        int i = 3;
+	    }
+	    printf("%d", i);	// wat doet dit?
+	}
+						</code></pre>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h4>4. OO design - poging 1</h4>
+
+						<pre><code>
+
+	var bookid = document.querySelector('#bookid').innerHTML;
+	var prolong = function(book, date, person) {
+			book.checkOutDate = date;
+			person.bookList.push(book);
+		}
+	};
+	doAjaxCall('getBookById.json', bookid, function(book) {
+		prolong(book, someDate, person);
+	});
+	document.querySelector('#messages').innerHTML = "thank you";
+
+						</code></pre>
+						Wat gaat er mis?
+					</section>
+					<section>
+						<h4>4. OO design - poging 2</h4>
+						<pre><code>
+	var Book = {
+		prolong: function(date, person) {
+			person.addToBookList(this);
+		}
+	};
+	var book = Object.create(Book);
+	book.prolong(someDate, person);
+	view.renderThankYouPage();
+						</code></pre>					
+
+						<pre><code>
+	describe("Book tests", function() {
+	  it("should add book to person list", function() {
+	  	var book = Object.create(Book);
+	  	book.prolong(someDate, person);
+
+	    expect(person.getBookList()).toContain(book);
+	  });
+	});						
+						</code></pre>
+					</section>
+					<section>
+						<h4>4. OO design - poging 2</h4>
+
+						<p>
+							Héél belangrijk in goed onderhoudbare JS code:
+						</p>
+
+						<p>
+							<ol>
+							<li>Scheiding domein/callbacks - async stuff</li>
+							<li>Scheiding domein/front - DOM manipulatie</li>
+							<li>Scheiding domein/frameworks - niet (makkelijk) testbaar!</li>
+							</ol>
+						</p>
+
+						<p>
+							Moeilijk testbare code => beter eerst testen geschreven??
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h4>Unit testing in JS</h4>
+						<p>
+							<a href="http://jasmine.github.io/2.5/introduction.html" target="_blank"><img src="img/jasmine-horizontal.png" alt="jasmine logo" /></a>
+						</p>
+
+						<pre><code>
+		describe("A suite", function() {
+		  it("contains spec with an expectation", function() {
+		    expect(true).toBe(true);
+		  });
+		});
+						</code></pre>
+
+						Beschrijft <strong>gedrag</strong>
+					</section>
+
+					<section data-background="img/abugslife.jpg">
+						<h4>TDD: "bugfix" edge case</h4>
+						live demo - remember "Period"?
+					</section>
+				</section>
+
+				<section>
+					<section data-background="img/lab3.jpg">
+						<h2>Oefening - HERWERKEN IN JS</h2>
+					</section>
+
+					<section>
+						<h4>Dierentuin - story 1 - remember?</h4>
+
+						<ul>
+						<li>maak een <strong>Dierentuin</strong> object</li>
+						<li>kan verschillende <strong>Dieren</strong> (<span class="inlinecode">object</span>) <strong>ontvangen</strong> (<span class="inlinecode">function</span>)</li>
+						<li>elk dier heeft een <strong>grootte</strong> en <strong>naam</strong>: <br/>Neushoorn (40), Giraf(25), Poema (10)</li>
+						<li>elke dierentuin heeft x <i>beschikbareRuimte</i> afhankelijk van <i>grootte</i> van het dier<br/>wat doe je bij het ontvangen van een te groot dier?
+						</ul>
+
+						<pre><code>
+var Dierentuin = {
+	bezoek: function() {
+		// return [] of dieren
+	}
+	ontvangDier: function(dier) {
+		// ??
+	}
+}
+						</code></pre>
+					</section>
+
+					<section>
+						<h4>Dierentuin - story 2</h4>
+
+						<ul>
+						<li><strong>voeder</strong> functie op dierentuin<br/>
+						return <span class="inlinecode">true</span> of <span class="inlinecode">false</span> indien genoeg voedsel voor elk ontvangen dier in de tuin</li>
+						<li>voedsel heeft een <strong>voedingswaarde</strong><br/>
+						Elk dier eet even veel waarde als zijn grootte</li>
+						<li>Verzin voedsel implementaties om alle edge cases te kunnen testen!</li>
+						</ul>
+
+						<pre><code>
+var Dierentuin = {
+	voeder: function(voedsel) {
+		return true;	// ??
+	}
+}
+						</code></pre>
+
+					</section>
+					<section>
+						<h4>Dierentuin - story 3</h4>
+
+						<p>
+							Hoe los je inheritance op in JS? (Een Neushoorn is een Dier)
+						</p>
+
+						<pre><code>
+var Dier = { };
+var Neushoorn = Object.create(Dier);
+var eenNeushoorn = Object.create(Neushoorn, { grootte: { value: 10 } });
+						</code></pre>
+
+						Want:
+
+						<pre><code>
+it("should inerit each other", function() {
+	expect(Object.getPrototypeOf(Dier)).toBe(Object.prototype);
+	expect(Object.getPrototypeOf(Neushoorn)).toBe(Dier);
+	expect(Object.getPrototypeOf(eenNeushoorn)).toBe(Neushoorn);
+});
+						</code></pre>
+						Herwerk je code!<br/>
+						<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">Zie Mozilla Developer Network</a>.
+					</section>
+					<section>
+						<h4>Dierentuin - discussie</h4>
+
+						<ul>
+						<li>Hoe heb je je objecten als instanties aangemaakt?</li>
+						<li>Genoeg testen geschreven voor elk geval?</li>
+						<li>Was dit makkelijk van PHP naar JS over te zetten?</li>
+						<li>Gedacht aan scoping?</li>
+						</ul>
+					</section>
+				</section>
+				<section>
+					<h2>JS Resources</h2>
+
+					<p>
+					Eerst leren kruipen, dan lopen!
+					</p>
+
+					<img src="img/jsthegoodparts.jpg"/>
+				</section>
+				<section data-background="img/fail.jpg">
+					&nbsp;
+				</section>
+
+				<section>
+					<section>
+						<h4 style="background-color: orange">integration testing - remember?</h4>
+						<ul>
+						<li>Test geïntegreerd met externen (db, webservice, ...)</li>
+						<li>Test integratie <strong>twee verschillende lagen</strong></li>
+						<li>Trager dan unit tests</li>
+						<li>Minder test cases</li>
+						</ul>
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - hoe één stukje testen?</h4>
+
+						<pre><code>
+	var Book = {
+		prolong: function(person) {
+			var date = Date.now();
+			this.dbHandle.prolong(date, person.id);
+		}
+	};
+						</code></pre>
+
+						Ik heb <span class="inlinecode">dbHandle.prolong()</span> apart getest, wat nu?
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - hoe één stukje testen?</h4>						
+
+						<p>
+							Injecteer een andere dbHandle: een "<strong>mock</strong>".
+						</p>
+
+						<pre><code>
+ 	var book = Object.create(Book);
+ 	book.dbHandle = {
+ 		prolong: function(date, personId) {
+ 			// Captured arguments! Assert stuff here
+ 		}
+ 	};
+						</code></pre>
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - met Jasmine</h4>						
+
+
+						<p>
+						Laat Jasmine "spies" aanmaken<br/>
+						<a href="http://jasmine.github.io/2.5/introduction.html#section-Spies" target="_blank">http://jasmine.github.io/2.5/introduction.html#section-Spies</a>
+						</p>
+
+						<pre><code>
+it("should call prolong from repository", function() {
+	var dbHandle = jasmine.createSpyObj('dbHandle', ['prolong']);
+	book.dbHandle = dbHandle;
+	book.prolong(person);
+
+	expect(dbHandle.prolong).ToHaveBeenCalledWith(
+		jasmine.any(Date), 
+		person.id);
+});
+						</code></pre>
+					</section>
+					<section>
+						<h4 style="background-color: orange">integration testing - met PHPUnit</h4>
+						<p><a href="https://phpunit.de/manual/current/en/test-doubles.html" target="_blank">https://phpunit.de/manual/current/en/test-doubles.html</a></p>
+
+						<pre><code>
+    public function testStub()
+    {
+        $mock = $this->createMock(SomeClass::class);
+        $mock->method('doSomething')->willReturn('foo');
+
+        $this->assertEquals('foo', $mock->doSomething());
+    }
+						</code></pre>
+					</section>
+
+					<section>
+						<h4 style="background-color: orange">integration testing - in Symphony</h4>
+
+						<p>
+						Welke stukken kan ik op die manier testen...<br/>
+						in een <strong>Symphony</strong> project?<br/><br/>
+
+						<img src="img/symphony.png" alt="symphony logo"/>
+						</p>
+					</section>
+
+					<section>
+						<h4 style="background-color: orange">integration testing - in Symphony</h4>
+
+						<ul>
+						<li>De entityManager <span class="inlinecode">ObjectManager</span> klasse</li>
+						<li>Stukjes domein logica uit controllers halen die elders getest zijn</li>
+						<li>...</li>
+						</ul>
+
+						<pre><code>
+      $bookRepositoryMock = $this->getMockBuilder(EntityRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+      $bookRepositoryMock->expects($this->once())
+            ->method('find')
+            ->will($this->returnValue($book));
+
+     $bookController = new BookController($bookRepositoryMock);
+						</code></pre>
+
+						<a href="http://symfony.com/doc/current/testing/database.html" target="_blank">http://symfony.com/doc/current/testing/database.html</a>
+					</section>
+
+				</section>
+
+				<section>
+					<h2>oefening - project bekijken van elkaar - switch van laptop!</h2>
+				</section>
 
 				<section data-background="img/thatsall.png">
 					
