@@ -862,7 +862,7 @@ representation within a system."
 					</section>
 
 					<section>
-						<h4>3. Scoping - poging 3</h4>
+						<h4>3. Scoping</h4>
 
 						Pas op met PHP! 
 
@@ -874,6 +874,23 @@ representation within a system."
 	    echo $i;
 	}
 	main();			// wat doet dit?
+						</code></pre>
+
+						En ook met Javascript! 
+
+						<pre><code>
+	var main = function () {
+	    if (true) {
+	        var i = 3;
+	    }
+	    console.log(i);
+	}
+    
+	main();			// wat doet dit?
+    
+                    </section>
+                    <section>
+                        <h4>3. Scoping</h4>
 						</code></pre>
 
 						VS een taal als C:
@@ -955,7 +972,7 @@ VS
 		}
 	};
 
-	var bookid = getBookIdFromView();
+	var bookid = view.getBookId();
 	doAjaxCall('getBookById.json', bookid, function(book) {
 		book.prolong(someDate, person);
 	});
