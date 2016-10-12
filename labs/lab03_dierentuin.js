@@ -14,8 +14,12 @@ Dierentuin = (function(grootte) {
 		}
 	};
 
-	var voeder = function() {
-
+	var voeder = function(voeding) {
+		return hokken.map(function(dier) {
+			return dier.grootte;
+		}).reduce(function(gr1, gr2) {
+			return gr1 + gr2
+		}) <= voeding.voedingswaarde;
 	};
 
 	return {

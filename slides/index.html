@@ -690,9 +690,23 @@ representation within a system."
 					</section>
 				</section>
 
-				<section>---- DAG 3 ----</section>
+				<section>
+					<h2>DAG 3</h2>
 
-				<section><h2>Clean code herhaling (JS):<br/>principes</h2></section>
+					<img src="img/timespent.jpg" alt="time spent by programmers at work"/>
+				</section>
+
+				<section>
+					<h2>Clean code herhaling (JS):<br/>principes</h2>
+					<blockquote>
+						Programmers are really authors, and your target audience is not the computer it is other programmers (and yourself). 
+					</blockquote>					
+				</section>
+
+				<section data-background="img/cleanfail.gif">
+					&nbsp;
+				</section>
+
 				<section>
 					<h4>1. Naamgeving: methods/variabelen</h4>
 
@@ -753,15 +767,33 @@ representation within a system."
 					<h4>2. Functies: Side effects</h4>
 					<pre><code>
 	function callback() {
-		if(!rendered) {
+		if(!this.rendered) {
 			reRenderContent();
 		}
-		rendered = true;
+		this.rendered = true;
 	}
 					</code></pre>
 
-					Vergeet niet dat dit op <span class="inlinecode">window</span> scope komt!
+					Zelfde principe in elke taal...
 				</section>
+
+				<section>
+					<h4>2. Functies - als prototypal extension</h4>
+
+					<pre><code>
+	String.prototype.capitalize = function() {
+		return this[0].toUpperCase() + this.substring(1, this.length);
+	};
+
+	expect("blabla".capitalize()).toEqual("Blabla");
+					</code></pre>
+
+					<p>
+						Is dit duidelijk voor uw mede developers? <br/>
+						Je hebt JS core functionaliteit uitgebreid!
+					</p>
+				</section>
+
 
 				<section>
 					<section>
@@ -836,7 +868,7 @@ representation within a system."
 
 						<pre><code>
 	function main() {
-	    if (1) {
+	    if (TRUE) {
 	        $i = 3;
 	    }
 	    echo $i;
@@ -848,13 +880,50 @@ representation within a system."
 
 						<pre><code>
 	void main() {
-	    if (1) {
+	    if (true) {
 	        int i = 3;
 	    }
 	    printf("%d", i);	// wat doet dit?
 	}
 						</code></pre>
 					</section>
+				</section>
+				<section>
+					<h4>3. Scoping - global #fail</h4>
+
+					<pre><code>
+	function calculateBookPrice() {
+		discount = 10;	// oops??
+		return this.basePrice + calculateOverduePrice() - discount;
+	}
+					</code></pre>
+
+					Wat is de waarde van <span class="inlinecode">window.discount</span>?
+				</section>
+
+				<section>
+					<h4>3. Scoping - Mix/machting tags</h4>
+
+					<pre><code>
+<?php
+echo "<table&gt;";
+echo "<tr&gt;<td&gt;";
+echo "Hai welcome to php";
+echo "</td&gt;</tr&gt;";
+echo "</table&gt;"; 
+?>
+					</code></pre>
+VS
+					<pre><code>
+<table>
+<tr><td>
+	<?php echo "Hai welcome to php"; ?>
+</td></tr>
+</table>					
+					</code></pre>
+
+					Pear PHP standaarden:<br/>
+					<a href="http://pear.php.net/manual/en/standards.php" target="_blank">http://pear.php.net/manual/en/standards.php</a>
 				</section>
 
 				<section>
@@ -885,11 +954,26 @@ representation within a system."
 			person.addToBookList(this);
 		}
 	};
-	var book = Object.create(Book);
-	book.prolong(someDate, person);
-	view.renderThankYouPage();
-						</code></pre>					
 
+	var bookid = getBookIdFromView();
+	doAjaxCall('getBookById.json', bookid, function(book) {
+		book.prolong(someDate, person);
+	});
+	view.renderThankYouPage();
+						</code></pre>
+						Wat gaat er mis?
+					</section>
+					<section>
+						<h4>4. OO design - poging 3</h4>
+						<pre><code>
+	doAjaxCall('getBookById.json', bookid, function(book) {
+		book.prolong(someDate, person);
+		view.renderThankYouPage();
+	});
+						</code></pre>
+					</section>
+					<section>		
+						<h4>4. OO design - Testen!</h4>			
 						<pre><code>
 	describe("Book tests", function() {
 	  it("should add book to person list", function() {
@@ -902,7 +986,7 @@ representation within a system."
 						</code></pre>
 					</section>
 					<section>
-						<h4>4. OO design - poging 2</h4>
+						<h4>4. OO design</h4>
 
 						<p>
 							Héél belangrijk in goed onderhoudbare JS code:
@@ -948,7 +1032,7 @@ representation within a system."
 
 				<section>
 					<section data-background="img/lab3.jpg">
-						<h2>Oefening - HERWERKEN IN JS</h2>
+						<h2>Oefening - Dierentuin HERWERKEN IN JS</h2>
 					</section>
 
 					<section>
@@ -1044,6 +1128,16 @@ it("should inerit each other", function() {
 
 				<section>
 					<section>
+						<h4>Soorten testen - remember?</h4>
+						<p>&nbsp;</p>
+						<div style="padding-left: 300px;">
+							<div style="width: 100px; background-color: red; margin-left: 125px;">E2E</div>
+							<div style="width: 250px; background-color: orange; margin-left: 50px;">Integration</div>
+							<div style="width: 350px; background-color: green">Unit</div>
+						</div>
+					</section>
+
+					<section>
 						<h4 style="background-color: orange">integration testing - remember?</h4>
 						<ul>
 						<li>Test geïntegreerd met externen (db, webservice, ...)</li>
@@ -1119,18 +1213,18 @@ it("should call prolong from repository", function() {
 					</section>
 
 					<section>
-						<h4 style="background-color: orange">integration testing - in Symphony</h4>
+						<h4 style="background-color: orange">integration testing - in Symfony</h4>
 
 						<p>
 						Welke stukken kan ik op die manier testen...<br/>
-						in een <strong>Symphony</strong> project?<br/><br/>
+						in een <strong>Symfony</strong> project?<br/><br/>
 
-						<img src="img/symphony.png" alt="symphony logo"/>
+						<img src="img/symfony.png" alt="symfony logo"/>
 						</p>
 					</section>
 
 					<section>
-						<h4 style="background-color: orange">integration testing - in Symphony</h4>
+						<h4 style="background-color: orange">integration testing - in Symfony</h4>
 
 						<ul>
 						<li>De entityManager <span class="inlinecode">ObjectManager</span> klasse</li>
@@ -1155,7 +1249,74 @@ it("should call prolong from repository", function() {
 				</section>
 
 				<section>
-					<h2>oefening - project bekijken van elkaar - switch van laptop!</h2>
+					<section data-background="img/codereview.jpg">
+						<h2>Oefening - CODE REVIEWS</h2>
+					</section>
+					<section>
+						<h4>Code reviews</h4>
+
+						<ul>
+						<li><strong>switch computers!</strong></li>
+						<li>Zoek actief naar stukken die <strong>goed</strong> en <strong>minder</strong> zijn.<br/>Denk aan clean code &amp; unit testen!</li>
+						<li>Nog <strong>geen code wijzigen</strong>!</li>
+						<li>Neem de tijd om alles onder de loep te nemen, incl testen.</li>
+						<li>Noteer in een open <strong>NOTEPAD</strong> scherm: <strong>+ WAAROM?</strong></li>
+						</ul>
+					</section>
+
+					<section>
+						<h4>Code reviews - discussie</h4>
+
+						<ul>
+						<li>Wie heeft de unit testen bekeken?<br/>Ontbreken er een aantal?</li>
+						<li>Wie heeft de applicatie daadwerkelijk gebruikt als eindgebruiker?</li>
+						<li>Wie heeft ook gelet op functionele vereisten die ontbreken?</li>
+						</ul>
+					</section>
+				</section>
+
+				<section>
+					<blockquote>
+						"Programmers should avoid writing code that looks like <span class="inlinecode" style="border: 1px dotted orange;">dog.getBody().getTail().wag();</span><br/>
+						The solution is to rewrite our example as <span class="inlinecode" style="border: 1px dotted lightgreen;">dog.expressHappiness();</span> <br/>and let the implementation of the dog 
+						decide what this means."
+					</blockquote>
+				</section>
+
+				<section>
+					<h2>het 'DRY' principe</h2>
+
+					<blockquote>
+						<strong>D</strong>on't<br/>
+						<strong>R</strong>epeat<br/>
+						<strong>Y</strong>ourself!
+					</blockquote>
+
+					<p>
+						Anders gezegd zijnde: <br/>
+						"Duplication is the root of all evil"
+					</p>
+				</section>
+
+				<section>
+					<h2>het 'YAGNI' principe</h2>
+
+					<blockquote>
+						<strong>Y</strong>ou<br/>
+						<strong>A</strong>int<br/>
+						<strong>G</strong>onna<br/>
+						<strong>N</strong>eed<br/>
+						<strong>I</strong>t
+					</blockquote>
+
+					<p>
+						Anders gezegd zijnde: <br/>
+						Schrap "Als dit er ooit komt en in geval van x..."
+					</p>
+				</section>
+
+				<section data-background="img/codereview.jpg">
+					<h2>Oefening - REFACTOR NA REVIEW</h2>
 				</section>
 
 				<section data-background="img/thatsall.png">
