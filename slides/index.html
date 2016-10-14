@@ -1187,7 +1187,7 @@ it("should inerit each other", function() {
 						</ul>
 					</section>
 					<section>
-						<h4 style="background-color: orange">integration testing - hoe één stukje testen?</h4>
+						<h4 style="background-color: green">unit testing - hoe één stukje testen?</h4>
 
 						<pre><code>
 	var Book = {
@@ -1201,7 +1201,7 @@ it("should inerit each other", function() {
 						Ik heb <span class="inlinecode">dbHandle.prolong()</span> apart getest, wat nu?
 					</section>
 					<section>
-						<h4 style="background-color: orange">integration testing - hoe één stukje testen?</h4>						
+						<h4 style="background-color: green">unit testing - hoe één stukje testen?</h4>						
 
 						<p>
 							Injecteer een andere dbHandle: een "<strong>mock</strong>".
@@ -1217,7 +1217,7 @@ it("should inerit each other", function() {
 						</code></pre>
 					</section>
 					<section>
-						<h4 style="background-color: orange">integration testing - met Jasmine</h4>						
+						<h4 style="background-color: green">unit testing - met Jasmine</h4>						
 
 
 						<p>
@@ -1238,22 +1238,25 @@ it("should call prolong from repository", function() {
 						</code></pre>
 					</section>
 					<section>
-						<h4 style="background-color: orange">integration testing - met PHPUnit</h4>
+						<h4 style="background-color: green">unit testing - met PHPUnit</h4>
 						<p><a href="https://phpunit.de/manual/current/en/test-doubles.html" target="_blank">https://phpunit.de/manual/current/en/test-doubles.html</a></p>
 
 						<pre><code>
     public function testStub()
     {
-        $mock = $this->createMock(SomeClass::class);
-        $mock->method('doSomething')->willReturn('foo');
+        $mock = $this->createMock(DbHandle::class);
+        $mock->method('prolong')
+        		->with($this->anything())
+        		->with($this->person.id);
+    	$book = new Book($mock);
 
-        $this->assertEquals('foo', $mock->doSomething());
+        $this->assertEquals('foo', $book->prolong());
     }
 						</code></pre>
 					</section>
 
 					<section>
-						<h4 style="background-color: orange">integration testing - in Symfony</h4>
+						<h4 style="background-color: green">unit testing - in Symfony</h4>
 
 						<p>
 						Welke stukken kan ik op die manier testen...<br/>
@@ -1264,7 +1267,7 @@ it("should call prolong from repository", function() {
 					</section>
 
 					<section>
-						<h4 style="background-color: orange">integration testing - in Symfony</h4>
+						<h4 style="background-color: green">unit testing - in Symfony</h4>
 
 						<ul>
 						<li>De entityManager <span class="inlinecode">ObjectManager</span> klasse</li>
