@@ -985,12 +985,13 @@ VS
 					<section>
 						<h4>4. OO design - poging 2</h4>
 						<pre><code>
+	// ------ domain/book.js ------ 
 	var Book = {
 		prolong: function(date, person) {
 			person.addToBookList(this);
 		}
 	};
-
+	// ------ controller/bookid.js ------
 	var bookid = view.getBookId();
 	doAjaxCall('getBookById.json', bookid, function(book) {
 		book.prolong(someDate, person);
@@ -1059,7 +1060,10 @@ VS
 
 						Beschrijft <strong>gedrag</strong>
 					</section>
-
+					<section>
+						<h4>Test Driven Development (TDD)<br/>remember?</h4>
+						<img src="img/tdd.png"/>
+					</section>
 					<section data-background="img/abugslife.jpg">
 						<h4>TDD: "bugfix" edge case</h4>
 						live demo - remember "Period"?
