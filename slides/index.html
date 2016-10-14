@@ -745,19 +745,19 @@ representation within a system."
 				<section>
 					<h4>2. Functies: argumenten</h4>
 					<pre><code>
-	function callback() {
-		if(arguments[0]) {
-			doSomethingWithArg0();
-		}
+	function prolongBook() {
 		if(arguments[1]) {
-			extraFlag = true;
+			var overdue = true;
+		}
+		if(arguments[0]) {
+			arguments[0].prolong(overdue);
 		}
 	}
 					</code></pre>
 					VS
 
 					<pre><code>
-	function callback(object, extraFlag) {
+	function prolongBook(book, isOverdue) {
 		// ...
 	}
 					</code></pre>
@@ -766,7 +766,7 @@ representation within a system."
 				<section>
 					<h4>2. Functies: Side effects</h4>
 					<pre><code>
-	function callback() {
+	function renderContentCallback() {
 		if(!this.rendered) {
 			reRenderContent();
 		}
@@ -792,6 +792,8 @@ representation within a system."
 						Is dit duidelijk voor uw mede developers? <br/>
 						Je hebt JS core functionaliteit uitgebreid!
 					</p>
+
+					<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">MDN inheritance docs</a>
 				</section>
 
 
@@ -875,8 +877,12 @@ representation within a system."
 	}
 	main();			// wat doet dit?
 						</code></pre>
+						Waarom?
+					</section>
+					<section>
+						<h4>3. Scoping</h4>
 
-						En ook met Javascript! 
+						Pas op met Javascript! 
 
 						<pre><code>
 	var main = function () {
@@ -885,9 +891,20 @@ representation within a system."
 	    }
 	    console.log(i);
 	}
-    
 	main();			// wat doet dit?
-    
+    				</code></pre>
+    				wordt door interpreter dit:
+
+						<pre><code>
+	var main = function () {
+		var i = undefined;
+	    if (true) {
+	        i = 3;
+	    }
+	    console.log(i);
+	}
+    				</code></pre>
+
                     </section>
                     <section>
                         <h4>3. Scoping</h4>
@@ -903,6 +920,8 @@ representation within a system."
 	    printf("%d", i);	// wat doet dit?
 	}
 						</code></pre>
+
+						Waarom? Statisch getypeerd!
 					</section>
 				</section>
 				<section>
