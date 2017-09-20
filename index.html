@@ -1089,18 +1089,20 @@ VS
 						<h4>Dierentuin - story 1 - remember?</h4>
 
 						<ul>
-						<li>maak een <strong>Dierentuin</strong> object</li>
-						<li>kan verschillende <strong>Dieren</strong> (<span class="inlinecode">object</span>) <strong>ontvangen</strong> (<span class="inlinecode">function</span>)</li>
+						<li>maak een <strong>Dierentuin</strong> class (ES6!)</li>
+						<li>kan verschillende <strong>Dieren</strong> <strong>ontvangen</strong></li>
 						<li>elk dier heeft een <strong>grootte</strong> en <strong>naam</strong>: <br/>Neushoorn (40), Giraf(25), Poema (10)</li>
 						<li>elke dierentuin heeft x <i>beschikbareRuimte</i> afhankelijk van <i>grootte</i> van het dier<br/>wat doe je bij het ontvangen van een te groot dier?
 						</ul>
 
 						<pre><code>
-var Dierentuin = {
-	bezoek: function() {
+class Dierentuin {
+	constructor() {}
+
+	bezoek() {
 		// return [] of dieren
 	}
-	ontvangDier: function(dier) {
+	ontvangDier(dier) {
 		// ??
 	}
 }
@@ -1119,8 +1121,8 @@ var Dierentuin = {
 						</ul>
 
 						<pre><code>
-var Dierentuin = {
-	voeder: function(voedsel) {
+class Dierentuin {
+	voeder(voedsel) {
 		return true;	// ??
 	}
 }
@@ -1128,38 +1130,37 @@ var Dierentuin = {
 
 					</section>
 					<section>
-						<h4>Dierentuin - story 3</h4>
+						<h4>Dierentuin - ES6 crash course</h4>
 
 						<p>
-							Hoe los je inheritance op in JS? (Een Neushoorn is een Dier)
+							Van PHP naar JS met ES6
 						</p>
 
+						JS VS PHP:
 						<pre><code>
-var Dier = { };
-var Neushoorn = Object.create(Dier);
-var eenNeushoorn = Object.create(Neushoorn, { grootte: { value: 10 } });
+class Dier {
+	constructor(arg) { }		// __construct()
+	eet(voedsel) {			// public function eet($voedsel)
+		this.boer();		// $this->boer();
+	}
+	boer() {			// public function boer()
+		console.log('burp'); 	// echo "burp";
+	}
+}
+new Dier().eet();			// new Dier()->eet();
 						</code></pre>
 
-						Want:
-
-						<pre><code>
-it("should inerit each other", function() {
-	expect(Object.getPrototypeOf(Dier)).toBe(Object.prototype);
-	expect(Object.getPrototypeOf(Neushoorn)).toBe(Dier);
-	expect(Object.getPrototypeOf(eenNeushoorn)).toBe(Neushoorn);
-});
-						</code></pre>
+						
 						Herwerk je code!<br/>
-						<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">Zie Mozilla Developer Network</a>.
+						<a href="http://es6-features.org/#ClassDefinition" target="_blank">http://es6-features.org/#ClassDefinition</a>.
 					</section>
 					<section>
 						<h4>Dierentuin - discussie</h4>
 
 						<ul>
-						<li>Hoe heb je je objecten als instanties aangemaakt?</li>
 						<li>Genoeg testen geschreven voor elk geval?</li>
 						<li>Was dit makkelijk van PHP naar JS over te zetten?</li>
-						<li>Gedacht aan scoping?</li>
+						<li>Gedacht aan classes en inheritance?</li>
 						</ul>
 					</section>
 				</section>
@@ -1174,6 +1175,27 @@ it("should inerit each other", function() {
 				</section>
 				<section data-background="img/fail.jpg">
 					&nbsp;
+				</section>
+
+				<section>
+					<h4>Linting tools: JSLint</h4>
+
+					<blockquote>
+						If a feature is sometimes useful and sometimes dangerous and if there is a better option then always use the better option.
+					</blockquote>
+
+					<strong>Code Quality tools</strong> demo @ <a href="http://jslint.com" target="_blank">JSLint</a> voor:
+
+					<pre><code>
+		"use strict";
+		function bla() {
+
+		  mwaha = "hi";
+		  if(mwaha == "hi") {
+		    console.log("hi there too")
+		  }
+		}
+					</code></pre>
 				</section>
 
 				<section>
