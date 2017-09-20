@@ -5,6 +5,8 @@
 Based on our own experience and books we've read. 
 These files will be used to teach and educate others on how to write clean code, in an object-oriented way.
 
+[Slides](http://wgroeneveld.github.io/cleancode-course)
+
 Other useful links:
 
 - Prato Service NV: http://www.prato-services.eu/ 
