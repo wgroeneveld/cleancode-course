@@ -216,14 +216,37 @@ class Person {
 				</section>
 
 				<section data-background="img/sideeffects.png">
-					<h4>2. Functies: Side effects</h4>
-					<pre><code>
-function prolong($date, $person) {
-	if($this->isOverDue()){
-		$person->credit -= 10;
+					<section>
+						<h4>2. Functies: Side effects</h4>
+
+						POGING 1
+						<pre><code>
+	class Book {
+			function prolong($date, $person) {
+				//prolong implementatie
+				if($this->isOverDue()){
+					$person->credit -= 10;
+				}
+		}
 	}
-}
-					</code></pre>															
+						</code></pre>
+					</section>
+					<section>
+					POGING 2
+
+						<pre><code>
+	class Book {
+		function prolong($date, $person) {
+			//prolong implementatie
+		}
+	}
+
+	if($book.isOverdue($date)){
+		$person->applyFine();
+	}
+	$book->prolong($date, $person);
+						</code></pre>															
+					</section>
 				</section>
 
 				<section>
@@ -715,7 +738,14 @@ representation within a system."
 		renderRest();
 	}
 	function renderRest() {
-		document.getElementById('#ak').innerHTML = 'wow';
+		document.getElementById('#ak').innerHTML = 'Hello PXL!';
+	}
+					</code></pre>
+					VS 
+
+					<pre><code>
+	function renderHelloPXLPage() {
+		document.getElementById('#content').innerHTML = 'Hello PXL!';
 	}
 					</code></pre>
 				</section>
@@ -776,26 +806,6 @@ representation within a system."
 
 					Zelfde principe in elke taal...
 				</section>
-
-				<section>
-					<h4>2. Functies - als prototypal extension</h4>
-
-					<pre><code>
-	String.prototype.capitalize = function() {
-		return this[0].toUpperCase() + this.substring(1, this.length);
-	};
-
-	expect("blabla".capitalize()).toEqual("Blabla");
-					</code></pre>
-
-					<p>
-						Is dit duidelijk voor uw mede developers? <br/>
-						Je hebt JS core functionaliteit uitgebreid!
-					</p>
-
-					<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">MDN inheritance docs</a>
-				</section>
-
 
 				<section>
 					<section>
