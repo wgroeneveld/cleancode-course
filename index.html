@@ -1254,18 +1254,19 @@ new Dier().eet();			// new Dier()->eet();
 
 						<p>
 						Laat Jasmine "spies" aanmaken<br/>
-						<a href="http://jasmine.github.io/2.5/introduction.html#section-Spies" target="_blank">http://jasmine.github.io/2.5/introduction.html#section-Spies</a>
+						<a href="https://jasmine.github.io/api/2.6/global.html#spyOn" target="_blank">https://jasmine.github.io/api/2.6/global.html#spyOn</a>
 						</p>
 
 						<pre><code>
-it("should call prolong from repository", function() {
-	var dbHandle = jasmine.createSpyObj('dbHandle', ['prolong']);
+it("should call prolong from repository", () => {
+	let personId;
+	const dbHandle = spyOn('dbHandle', 'prolong').and.callFake((theDate, thePersonId) => {
+		personId = thePersonId;
+	});
 	book.dbHandle = dbHandle;
 	book.prolong(person);
 
-	expect(dbHandle.prolong).ToHaveBeenCalledWith(
-		jasmine.any(Date), 
-		person.id);
+	expect(personId).toBe(person.id);
 });
 						</code></pre>
 					</section>
