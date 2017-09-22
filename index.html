@@ -37,7 +37,7 @@
 							<span style="font-size: 11pt;">
 
 								Wouter Groeneveld &amp; Luk Weyens<br/>
-								22/09/2016
+								22/09/2017
 							</span>
 						</small>
 					</p>
@@ -216,14 +216,37 @@ class Person {
 				</section>
 
 				<section data-background="img/sideeffects.png">
-					<h4>2. Functies: Side effects</h4>
-					<pre><code>
-function prolong($date, $person) {
-	if($this->isOverDue()){
-		$person->credit -= 10;
+					<section>
+						<h4>2. Functies: Side effects</h4>
+
+						POGING 1
+						<pre><code>
+	class Book {
+			function prolong($date, $person) {
+				//prolong implementatie
+				if($this->isOverDue()){
+					$person->credit -= 10;
+				}
+		}
 	}
-}
-					</code></pre>															
+						</code></pre>
+					</section>
+					<section>
+					POGING 2
+
+						<pre><code>
+	class Book {
+		function prolong($date, $person) {
+			//prolong implementatie
+		}
+	}
+
+	if($book.isOverdue($date)){
+		$person->applyFine();
+	}
+	$book->prolong($date, $person);
+						</code></pre>															
+					</section>
 				</section>
 
 				<section>
@@ -339,7 +362,7 @@ $book->setCheckoutDate($checkoutDate);
 						</code></pre>					
 
 						<pre><code>
-	class BookTest extends PHPUnit_Framework_TestCase {
+	class BookTest extends TestCase {
 		public void testProlongAddsToPersonBookList() {
 			// ...
 		}
@@ -429,7 +452,7 @@ function getBookById($id) {
 
 						<ul>
 						<li>maak een <strong>Dierentuin</strong> class</li>
-						<li>kan verschillende <strong>Dieren</strong> (<span class="inlinecode">class</span>) <strong>ontvangen</strong> (<span class="inlinecode">function</span>)</li>
+						<li>kan verschillende <strong>Dier</strong>en (<span class="inlinecode">class</span>) <strong>ontvangen</strong> (<span class="inlinecode">function</span>)</li>
 						<li>elk dier heeft een <strong>grootte</strong> en <strong>naam</strong>: <br/>Neushoorn (40), Giraf(25), Poema (10)</li>
 						<li>elke dierentuin heeft x <i>beschikbareRuimte</i> afhankelijk van <i>grootte</i> van het dier<br/>wat doe je bij het ontvangen van een te groot dier?
 						</ul>
@@ -467,11 +490,47 @@ class Dierentuin {
 
 					</section>
 					<section>
+						<h4>Dierentuin - story 3</h4>
+
+						<ul>
+						<li>Dieren zijn <strong>carnivoeren</strong>, <strong>herbivoren</strong> of <strong>omnivoren</strong>!</li>
+						<li>voedsel is ofwel <strong>vlees</strong>- of <strong>plant</strong>-gebaseerd </li>
+						<li>Wat doe je als je een carnivoor sla geeft, of een herbivoor een stukje kip?</li>
+						<li>Focus op de testen! Alle gevallen onder test brengen.</li>
+						</ul>
+
+						<pre><code>
+	public function voeder($voedsel) {
+		// wat nu??
+	}
+						</code></pre>
+
+					</section>
+					<section>
+						<h4>Dierentuin - story 4</h4>
+
+						<ul>
+						<li>Dieren zijn <strong>allergisch</strong> aan bepaald voedsel!</li>
+						<li>Wat doe je als een dier voedsel eet wat het niet verdraagt?<br/>
+							Hoe ga je om in de <span class="inlinecode">Dierentuin</span> klasse met een dier minder?</li>
+						<li>Wat doe je in de <span class="inlinecode">voeder</span> implementatie?</li>
+						</ul>
+
+						<pre><code>
+class Dier {
+	public function isAllergischAan($voedsel) {
+		return TRUE;	// ??
+	}
+}
+						</code></pre>
+
+					</section>
+					<section>
 						<h4>Dierentuin - discussie</h4>
 
 						<ul>
 						<li>Polymorfisme niet vergeten?</li>
-						<li>Genoeg testen geschreven voor elk geval?</li>
+						<li>Genoeg testen geschreven <strong>voor elk geval</strong>?</li>
 						<li>Exceptions gebruikt ipv return code?</li>
 						</ul>
 					</section>
@@ -715,7 +774,14 @@ representation within a system."
 		renderRest();
 	}
 	function renderRest() {
-		document.getElementById('#ak').innerHTML = 'wow';
+		document.getElementById('#ak').innerHTML = 'Hello PXL!';
+	}
+					</code></pre>
+					VS 
+
+					<pre><code>
+	function renderHelloPXLPage() {
+		document.getElementById('#content').innerHTML = 'Hello PXL!';
 	}
 					</code></pre>
 				</section>
@@ -776,26 +842,6 @@ representation within a system."
 
 					Zelfde principe in elke taal...
 				</section>
-
-				<section>
-					<h4>2. Functies - als prototypal extension</h4>
-
-					<pre><code>
-	String.prototype.capitalize = function() {
-		return this[0].toUpperCase() + this.substring(1, this.length);
-	};
-
-	expect("blabla".capitalize()).toEqual("Blabla");
-					</code></pre>
-
-					<p>
-						Is dit duidelijk voor uw mede developers? <br/>
-						Je hebt JS core functionaliteit uitgebreid!
-					</p>
-
-					<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">MDN inheritance docs</a>
-				</section>
-
 
 				<section>
 					<section>
@@ -1079,18 +1125,20 @@ VS
 						<h4>Dierentuin - story 1 - remember?</h4>
 
 						<ul>
-						<li>maak een <strong>Dierentuin</strong> object</li>
-						<li>kan verschillende <strong>Dieren</strong> (<span class="inlinecode">object</span>) <strong>ontvangen</strong> (<span class="inlinecode">function</span>)</li>
+						<li>maak een <strong>Dierentuin</strong> class (ES6!)</li>
+						<li>kan verschillende <strong>Dieren</strong> <strong>ontvangen</strong></li>
 						<li>elk dier heeft een <strong>grootte</strong> en <strong>naam</strong>: <br/>Neushoorn (40), Giraf(25), Poema (10)</li>
 						<li>elke dierentuin heeft x <i>beschikbareRuimte</i> afhankelijk van <i>grootte</i> van het dier<br/>wat doe je bij het ontvangen van een te groot dier?
 						</ul>
 
 						<pre><code>
-var Dierentuin = {
-	bezoek: function() {
+class Dierentuin {
+	constructor() {}
+
+	bezoek() {
 		// return [] of dieren
 	}
-	ontvangDier: function(dier) {
+	ontvangDier(dier) {
 		// ??
 	}
 }
@@ -1109,8 +1157,8 @@ var Dierentuin = {
 						</ul>
 
 						<pre><code>
-var Dierentuin = {
-	voeder: function(voedsel) {
+class Dierentuin {
+	voeder(voedsel) {
 		return true;	// ??
 	}
 }
@@ -1120,36 +1168,71 @@ var Dierentuin = {
 					<section>
 						<h4>Dierentuin - story 3</h4>
 
+						<ul>
+						<li>Dieren zijn <strong>carnivoren</strong>, <strong>herbivoren</strong> of <strong>omnivoren</strong>!</li>
+						<li>voedsel is ofwel <strong>vlees</strong>- of <strong>plant</strong>-gebaseerd </li>
+						<li>Wat doe je als je een carnivoor sla geeft, of een herbivoor een stukje kip?</li>
+						<li>Focus op de testen! Alle gevallen onder test brengen.</li>
+						</ul>
+
+						<pre><code>
+	public function voeder($voedsel) {
+		// wat nu??
+	}
+						</code></pre>
+
+					</section>
+					<section>
+						<h4>Dierentuin - story 4</h4>
+
+						<ul>
+						<li>Dieren zijn <strong>allergisch</strong> aan bepaald voedsel!</li>
+						<li>Wat doe je als een dier voedsel eet wat het niet verdraagt?<br/>
+							Hoe ga je om in de <span class="inlinecode">Dierentuin</span> klasse met een dier minder?</li>
+						<li>Wat doe je in de <span class="inlinecode">voeder</span> implementatie?</li>
+						</ul>
+
+						<pre><code>
+class Dier {
+	public function isAllergischAan($voedsel) {
+		return TRUE;	// ??
+	}
+}
+						</code></pre>
+
+					</section>					
+					<section>
+						<h4>Dierentuin - ES6 crash course</h4>
+
 						<p>
-							Hoe los je inheritance op in JS? (Een Neushoorn is een Dier)
+							Van PHP naar JS met ES6
 						</p>
 
+						JS VS PHP:
 						<pre><code>
-var Dier = { };
-var Neushoorn = Object.create(Dier);
-var eenNeushoorn = Object.create(Neushoorn, { grootte: { value: 10 } });
+class Dier {
+	constructor(arg) { }		// __construct()
+	eet(voedsel) {			// public function eet($voedsel)
+		this.boer();		// $this->boer();
+	}
+	boer() {			// public function boer()
+		console.log('burp'); 	// echo "burp";
+	}
+}
+new Dier().eet();			// new Dier()->eet();
 						</code></pre>
 
-						Want:
-
-						<pre><code>
-it("should inerit each other", function() {
-	expect(Object.getPrototypeOf(Dier)).toBe(Object.prototype);
-	expect(Object.getPrototypeOf(Neushoorn)).toBe(Dier);
-	expect(Object.getPrototypeOf(eenNeushoorn)).toBe(Neushoorn);
-});
-						</code></pre>
+						
 						Herwerk je code!<br/>
-						<a href="https://developer.mozilla.org/en/docs/Web/JavaScript/Inheritance_and_the_prototype_chain" target="_blank">Zie Mozilla Developer Network</a>.
+						<a href="http://es6-features.org/#ClassDefinition" target="_blank">http://es6-features.org/#ClassDefinition</a>.
 					</section>
 					<section>
 						<h4>Dierentuin - discussie</h4>
 
 						<ul>
-						<li>Hoe heb je je objecten als instanties aangemaakt?</li>
 						<li>Genoeg testen geschreven voor elk geval?</li>
 						<li>Was dit makkelijk van PHP naar JS over te zetten?</li>
-						<li>Gedacht aan scoping?</li>
+						<li>Gedacht aan classes en inheritance?</li>
 						</ul>
 					</section>
 				</section>
@@ -1164,6 +1247,27 @@ it("should inerit each other", function() {
 				</section>
 				<section data-background="img/fail.jpg">
 					&nbsp;
+				</section>
+
+				<section>
+					<h4>Linting tools: JSLint</h4>
+
+					<blockquote>
+						If a feature is sometimes useful and sometimes dangerous and if there is a better option then always use the better option.
+					</blockquote>
+
+					<strong>Code Quality tools</strong> demo @ <a href="http://jslint.com" target="_blank">JSLint</a> voor:
+
+					<pre><code>
+		"use strict";
+		function bla() {
+
+		  mwaha = "hi";
+		  if(mwaha == "hi") {
+		    console.log("hi there too")
+		  }
+		}
+					</code></pre>
 				</section>
 
 				<section>
@@ -1222,18 +1326,19 @@ it("should inerit each other", function() {
 
 						<p>
 						Laat Jasmine "spies" aanmaken<br/>
-						<a href="http://jasmine.github.io/2.5/introduction.html#section-Spies" target="_blank">http://jasmine.github.io/2.5/introduction.html#section-Spies</a>
+						<a href="https://jasmine.github.io/api/2.6/global.html#spyOn" target="_blank">https://jasmine.github.io/api/2.6/global.html#spyOn</a>
 						</p>
 
 						<pre><code>
-it("should call prolong from repository", function() {
-	var dbHandle = jasmine.createSpyObj('dbHandle', ['prolong']);
+it("should call prolong from repository", () => {
+	let personId;
+	const dbHandle = spyOn('dbHandle', 'prolong').and.callFake((theDate, thePersonId) => {
+		personId = thePersonId;
+	});
 	book.dbHandle = dbHandle;
 	book.prolong(person);
 
-	expect(dbHandle.prolong).ToHaveBeenCalledWith(
-		jasmine.any(Date), 
-		person.id);
+	expect(personId).toBe(person.id);
 });
 						</code></pre>
 					</section>
@@ -1369,7 +1474,7 @@ it("should call prolong from repository", function() {
 					<blockquote style="background-color: white;">
 						<img src="img/logo.png"/>
 					</blockquote>				
-					<a href="http://www.prato.be" target="_blank">http://www.prato.be</a><br/>
+					<a href="http://www.prato-services.eu/" target="_blank">http://www.prato-services.eu/</a><br/>
 					<a href="mailto:vacatures@prato.be">vacatures@prato.be</a>
 				</section>
 

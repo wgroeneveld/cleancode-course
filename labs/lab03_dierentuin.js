@@ -1,31 +1,27 @@
-Dierentuin = (function(grootte) {
+class Dierentuin {
 
-	var hokken = [];
-	var beschikbareGrootte = grootte;
+	constructor(grootte) {
+		this._grootte = grootte;
+		this._beschikbareGrootte = grootte;
+		this._hokken = [];
+	}
 
-	var bezoek = function() {
-		return hokken;
-	};
+	bezoek() {
+		return this._hokken;
+	}
 
-	var ontvangDier = function(dier) {
-		if(dier.grootte <= beschikbareGrootte) {
-			hokken.push(dier);
-			beschikbareGrootte -= dier.grootte;
+	ontvangDier(dier) {
+		if(dier.grootte <= this._beschikbareGrootte) {
+			this._hokken.push(dier);
+			this._beschikbareGrootte -= dier.grootte;
 		}
-	};
+	}
 
-	var voeder = function(voeding) {
-		return hokken.map(function(dier) {
+	voeder(voeding) {
+		return this._hokken.map(function(dier) {
 			return dier.grootte;
 		}).reduce(function(gr1, gr2) {
 			return gr1 + gr2
 		}) <= voeding.voedingswaarde;
-	};
-
-	return {
-		bezoek: bezoek,
-		ontvangDier: ontvangDier,
-		voeder: voeder
 	}
-
-});
+}

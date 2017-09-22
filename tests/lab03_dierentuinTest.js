@@ -4,7 +4,7 @@ describe("dierentuin tests", function() {
 	var tuin;
 
 	beforeEach(function() {
-		tuin = Dierentuin(40);
+		tuin = new Dierentuin(40);
 	});
 
 	describe("dieren ontvangen in de dierentuin", function() {
