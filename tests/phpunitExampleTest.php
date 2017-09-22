@@ -8,8 +8,9 @@ class Amazing {
 }
 
 
+use PHPUnit\Framework\TestCase;
 // hulp nodig? https://phpunit.de/manual/current/en/appendixes.assertions.html
-class AmazingTest extends PHPUnit_Framework_TestCase {
+class AmazingTest extends TestCase {
 
 	public function testWow_returnsGetalPlus1() {
 		$amazing = new Amazing();

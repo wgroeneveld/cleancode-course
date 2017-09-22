@@ -1,8 +1,9 @@
 <?php
 
 require_once('labs/period.php');
+use PHPUnit\Framework\TestCase;
 
-class PeriodTest extends PHPUnit_Framework_TestCase {
+class PeriodTest extends TestCase {
 
 	public function setUp() {
 		date_default_timezone_set('Europe/Brussels');

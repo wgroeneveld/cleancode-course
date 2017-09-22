@@ -2,7 +2,8 @@
 
 require_once('labs/lab01_methods.php');
 
-class Lab01Test extends PHPUnit_Framework_TestCase {
+use PHPUnit\Framework\TestCase;
+class Lab01Test extends TestCase {
 
 	private $theEmpire;
 

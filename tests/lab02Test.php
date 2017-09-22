@@ -1,9 +1,10 @@
 <?php
 
 require_once('labs/lab02_oodesign.php');
+use PHPUnit\Framework\TestCase;
 
 // hulp nodig? https://phpunit.de/manual/current/en/appendixes.assertions.html
-class Lab0200DesignTest extends PHPUnit_Framework_TestCase {
+class Lab0200DesignTest extends TestCase {
 
 	/**
 	* @expectedException InvalidArgumentException
