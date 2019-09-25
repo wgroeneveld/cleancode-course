@@ -7,11 +7,11 @@ class Lab01Test extends TestCase {
 
 	private $theEmpire;
 
-	public function setUp() {
+	protected function setUp() : void {
 		$this->theEmpire = new Empire();
 	}
 
-	public function tearDown() {
+	public function tearDown() : void {
 		$this->theEmpire = null;
 	}
 

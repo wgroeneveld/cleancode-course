@@ -6,11 +6,9 @@ use PHPUnit\Framework\TestCase;
 // hulp nodig? https://phpunit.de/manual/current/en/appendixes.assertions.html
 class Lab0200DesignTest extends TestCase {
 
-	/**
-	* @expectedException InvalidArgumentException
-	*/
 	public function testOntvangDier_teGrootVoorDierentuin_throwsException() {
 		$tuin = Dierentuin::NieuweKleineTuin();
+		$this->expectException(InvalidArgumentException::class);
 		$tuin->ontvangDier(new Neushoorn('joske'));
 	}
 
